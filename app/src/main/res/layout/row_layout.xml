@@ -13,7 +13,7 @@
         android:layout_marginStart="24dp"
         android:text="Course Code"
         android:textAlignment="textStart"
-        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textAppearance="@android:style/TextAppearance.Large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/gradesDropDown"
         app:layout_constraintStart_toStartOf="parent"

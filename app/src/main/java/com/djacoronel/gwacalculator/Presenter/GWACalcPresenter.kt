@@ -10,7 +10,12 @@ class GWACalcPresenter(val view: Contract.View, val repo: Contract.Repository) :
         val courses = repo.getAllCourse()
         val sum = courses.sumByDouble { it.grade * it.units }
         val totalUnits = courses.sumBy { it.units }
-        view.updateGWA(sum/totalUnits)
+        var gwa = sum/totalUnits
+
+        if(gwa.isNaN())
+            gwa = 0.0
+
+        view.updateGWA(gwa)
     }
 
     override fun loadCourses() {
