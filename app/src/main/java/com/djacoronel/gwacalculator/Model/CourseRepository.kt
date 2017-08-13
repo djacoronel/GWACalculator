@@ -9,7 +9,7 @@ class CourseRepository(mContext: Context) : Contract.Repository {
     val database = DbHelper.getInstance(mContext)
 
     override fun getCourse(courseCode: String): Course {
-        var course = Course("CC", 0.0, 0.0)
+        var course = Course("CC", 0, 0.0)
         database.use {
             select("Course")
                     .whereArgs("(courseCode = {courseCode})",

@@ -1,4 +1,4 @@
-package com.djacoronel.gwacalculator.Presenter
+package com.djacoronel.gwacalculator.View
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,12 +9,10 @@ import com.djacoronel.gwacalculator.R
 import kotlinx.android.synthetic.main.row_layout.view.*
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
-import com.djacoronel.gwacalculator.View.MainActivity
 
 
-
-class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -> Unit):
-        RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(){
+class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -> Unit) :
+        RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     //extension function to simplify view inflation in an adapter
     fun ViewGroup.inflate(layoutRes: Int): View {
@@ -29,10 +27,13 @@ class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -
 
     override fun getItemCount() = courses.size
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(course: Course, listener: (Course) -> Unit) = with(itemView) {
             courseCodeText.text = course.courseCode
-            unitsText.text = course.units.toString()
+
+            val units = course.units
+            unitsText.text = "${units.toString()} ${if (units == 1) "unit" else "units"}"
+
             setOnLongClickListener {
                 (context as MainActivity).showDeletePrompt(course)
                 true

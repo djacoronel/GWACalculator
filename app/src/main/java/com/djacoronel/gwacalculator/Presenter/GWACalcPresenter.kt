@@ -9,7 +9,7 @@ class GWACalcPresenter(val view: Contract.View, val repo: Contract.Repository) :
     override fun computeGWA(){
         val courses = repo.getAllCourse()
         val sum = courses.sumByDouble { it.grade * it.units }
-        val totalUnits = courses.sumByDouble { it.units }
+        val totalUnits = courses.sumBy { it.units }
         view.updateGWA(sum/totalUnits)
     }
 

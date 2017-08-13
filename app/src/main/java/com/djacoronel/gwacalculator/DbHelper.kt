@@ -20,7 +20,7 @@ class DbHelper(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "mydb") {
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable("Course", true,
                 "courseCode" to TEXT + PRIMARY_KEY,
-                "units" to REAL,
+                "units" to INTEGER,
                 "grade" to REAL)
     }
 

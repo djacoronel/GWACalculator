@@ -7,7 +7,6 @@ import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.Model.Course
 import com.djacoronel.gwacalculator.Model.CourseRepository
 import com.djacoronel.gwacalculator.Presenter.GWACalcPresenter
-import com.djacoronel.gwacalculator.Presenter.RecyclerAdapter
 import com.djacoronel.gwacalculator.R
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -44,7 +43,7 @@ class MainActivity : AppCompatActivity(), Contract.View{
            customView = view
            positiveButton("Add"){
                val courseCode = view.courseCodeInput.text.toString()
-               val units = view.unitInputDropDown.selectedItem.toString().toDouble()
+               val units = view.unitInputDropDown.selectedItem.toString().toInt()
                val grade = view.gradesInputDropDown.selectedItem.toString().toDouble()
 
                mPresenter.addCourse(Course(courseCode, units, grade))
@@ -65,6 +64,6 @@ class MainActivity : AppCompatActivity(), Contract.View{
 
     override fun showTable(courses: MutableList<Course>) {
         courseList.layoutManager = LinearLayoutManager(this)
-        courseList.adapter = RecyclerAdapter(courses){}
+        courseList.adapter = RecyclerAdapter(courses) {}
     }
 }
