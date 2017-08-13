@@ -54,7 +54,9 @@ class CourseRepository(mContext: Context) : Contract.Repository {
 
     override fun removeCourse(course: Course){
         database.use{
-            delete("Course", "(courseCode = ${course.courseCode})")
+            delete("Course",
+                    "(courseCode = {courseCode})",
+                    "courseCode" to course.courseCode)
         }
     }
 }

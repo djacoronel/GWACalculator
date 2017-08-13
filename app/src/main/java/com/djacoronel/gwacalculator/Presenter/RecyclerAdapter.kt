@@ -9,6 +9,9 @@ import com.djacoronel.gwacalculator.R
 import kotlinx.android.synthetic.main.row_layout.view.*
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import com.djacoronel.gwacalculator.View.MainActivity
+
+
 
 class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -> Unit):
         RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(){
@@ -30,6 +33,10 @@ class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -
         fun bind(course: Course, listener: (Course) -> Unit) = with(itemView) {
             courseCodeText.text = course.courseCode
             unitsText.text = course.units.toString()
+            setOnLongClickListener {
+                (context as MainActivity).showDeletePrompt(course)
+                true
+            }
 
             val grades = resources.getStringArray(R.array.grade_array)
             gradesDropDown.setSelection(grades.indexOf(course.grade.toString()))
@@ -40,7 +47,8 @@ class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -
                 override fun onItemSelected(parentView: AdapterView<*>, view: View,
                                             position: Int, id: Long) {
                     course.grade = parentView.getItemAtPosition(position).toString().toDouble()
-                    listener(course)
+                    (context as MainActivity).mPresenter.updateCourse(course)
+                    (context as MainActivity).mPresenter.computeGWA()
                 }
             }
         }

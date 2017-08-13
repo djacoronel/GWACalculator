@@ -6,8 +6,8 @@ import com.djacoronel.gwacalculator.Model.Course
 
 class GWACalcPresenter(val view: Contract.View, val repo: Contract.Repository) : Contract.Actions{
 
-
-    override fun computeGWA(courses: MutableList<Course>){
+    override fun computeGWA(){
+        val courses = repo.getAllCourse()
         val sum = courses.sumByDouble { it.grade * it.units }
         val totalUnits = courses.sumByDouble { it.units }
         view.updateGWA(sum/totalUnits)
@@ -33,6 +33,8 @@ class GWACalcPresenter(val view: Contract.View, val repo: Contract.Repository) :
 
     override fun removeCourse(course: Course) {
         repo.removeCourse(course)
+        loadCourses()
+        computeGWA()
     }
 
     override fun updateCourse(course: Course) {

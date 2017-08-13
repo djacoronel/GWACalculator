@@ -8,11 +8,12 @@ class Contract{
     interface View{
         fun showTable(courses: MutableList<Course>)
         fun updateGWA(gwa: Double)
+        fun showDeletePrompt(course: Course)
         fun showInput()
     }
 
     interface Actions{
-        fun computeGWA(courses: MutableList<Course>)
+        fun computeGWA()
         fun loadCourses()
         fun getCourse(courseCode: String): Course
         fun addCourse(course: Course)

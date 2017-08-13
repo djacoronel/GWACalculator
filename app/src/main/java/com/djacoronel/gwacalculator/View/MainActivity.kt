@@ -15,11 +15,10 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.gwa_layout.*
 import kotlinx.android.synthetic.main.input_layout.view.*
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), Contract.View{
 
-    private lateinit var mPresenter: Contract.Actions
+    lateinit var mPresenter: Contract.Actions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity(), Contract.View{
 
         mPresenter = GWACalcPresenter(this, CourseRepository(this))
         mPresenter.loadCourses()
-
 
         fab.setOnClickListener {
             showInput()
@@ -55,12 +53,18 @@ class MainActivity : AppCompatActivity(), Contract.View{
        }.show()
     }
 
+    override fun showDeletePrompt(course: Course) {
+        alert {
+            title = "Delete Course?"
+            positiveButton("Cancel"){}
+            negativeButton("Delete"){
+                mPresenter.removeCourse(course)
+            }
+        }.show()
+    }
+
     override fun showTable(courses: MutableList<Course>) {
         courseList.layoutManager = LinearLayoutManager(this)
-        courseList.adapter = RecyclerAdapter(courses){
-            toast("Computing GWA")
-            mPresenter.updateCourse(it)
-            mPresenter.computeGWA(courses)
-        }
+        courseList.adapter = RecyclerAdapter(courses){}
     }
 }
