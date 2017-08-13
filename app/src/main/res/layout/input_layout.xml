@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Spinner
+        android:id="@+id/unitInputDropDown"
+        android:layout_width="108dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="8dp"
+        android:entries="@array/units_array"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toStartOf="@+id/gradesInputDropDown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unitInputText"
+        android:layout_marginRight="8dp"
+        android:gravity="end" />
+
+    <Spinner
+        android:id="@+id/gradesInputDropDown"
+        android:layout_width="108dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="72dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:entries="@array/grade_array"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/unitInputDropDown"
+        app:layout_constraintTop_toBottomOf="@+id/gradeInputText"
+        android:gravity="end" />
+
+    <EditText
+        android:id="@+id/courseCodeInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Course Code"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/unitInputText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
+        android:text="Units"
+        app:layout_constraintEnd_toStartOf="@+id/gradeInputText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courseCodeInput"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/gradeInputText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="4dp"
+        android:text="Grade"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/unitInputText"
+        app:layout_constraintTop_toBottomOf="@+id/courseCodeInput"
+        android:layout_marginLeft="0dp" />
+</android.support.constraint.ConstraintLayout>

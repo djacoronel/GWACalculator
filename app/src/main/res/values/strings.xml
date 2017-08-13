@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">GWA Calculator</string>
+
+    <string-array name="grade_array">
+        <item>1.0</item>
+        <item>1.25</item>
+        <item>1.5</item>
+        <item>1.75</item>
+        <item>2.0</item>
+        <item>2.25</item>
+        <item>2.5</item>
+        <item>2.75</item>
+        <item>3.0</item>
+        <item>5.0</item>
+    </string-array>
+
+    <string-array name="units_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+</resources>
