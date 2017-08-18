@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,7 +12,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="GWA:"
+        android:text="@string/gwa_label"
         android:textAppearance="@android:style/TextAppearance.Large"
         app:layout_constraintEnd_toStartOf="@+id/gwaValue"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +25,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="0.000"
+        android:text="@string/gwa_value"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textSize="36sp"
         android:textStyle="bold"

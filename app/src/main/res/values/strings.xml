@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">GWA Calculator</string>
+    <string name="gwa_label">GWA:</string>
+    <string name="gwa_value">0.000</string>
+    <string name="course_code_label">Course Code</string>
+    <string name="units_label">Units</string>
+    <string name="grade_label">Grade</string>
+    <string name="gwa_format">%.3f</string>
 
     <string-array name="grade_array">
         <item>1.0</item>

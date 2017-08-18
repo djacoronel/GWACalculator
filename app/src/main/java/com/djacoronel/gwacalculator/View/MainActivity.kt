@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), Contract.View{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
 
         mPresenter = GWACalcPresenter(this, CourseRepository(this))
         mPresenter.loadCourses()
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity(), Contract.View{
     }
 
     override fun updateGWA(gwa: Double) {
-        gwaValue.text = "%.3f".format(gwa)
+        gwaValue.text = getString(R.string.gwa_format).format(gwa)
     }
 
     override fun showInput() {
