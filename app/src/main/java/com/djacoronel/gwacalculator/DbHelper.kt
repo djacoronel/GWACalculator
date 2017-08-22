@@ -21,7 +21,10 @@ class DbHelper(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "mydb") {
         db.createTable("Course", true,
                 "courseCode" to TEXT + PRIMARY_KEY,
                 "units" to INTEGER,
-                "grade" to REAL)
+                "grade" to REAL,
+                "semester" to TEXT)
+        db.createTable("Semester", true,
+                "semester" to TEXT + PRIMARY_KEY)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

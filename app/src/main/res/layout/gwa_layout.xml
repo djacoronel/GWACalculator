@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorPrimary"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/gwaText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/gwa_label"
+        android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
-        app:layout_constraintEnd_toStartOf="@+id/gwaValue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/gwaValue"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="@+id/gwaValue"
+        android:layout_marginStart="8dp" />
 
     <TextView
         android:id="@+id/gwaValue"
@@ -24,12 +27,43 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         android:text="@string/gwa_value"
+        android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:textSize="36sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/gwaText"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/semValue"
+        app:layout_constraintTop_toBottomOf="@+id/gwaText" />
+
+    <TextView
+        android:id="@+id/semText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sem_label"
+        android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        tools:layout_editor_absoluteY="0dp"
+        app:layout_constraintStart_toStartOf="@+id/semValue"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/semValue"
+        app:layout_constraintBottom_toTopOf="@id/semValue"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:id="@+id/semValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/sem_value"
+        android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/gwaValue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/semText" />
+
 </android.support.constraint.ConstraintLayout>

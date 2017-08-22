@@ -1,11 +1,30 @@
 <resources>
     <string name="app_name">GWA Calculator</string>
-    <string name="gwa_label">GWA:</string>
+    <string name="gwa_label">GWA</string>
     <string name="gwa_value">0.000</string>
     <string name="course_code_label">Course Code</string>
     <string name="units_label">Units</string>
     <string name="grade_label">Grade</string>
     <string name="gwa_format">%.3f</string>
+    <string name="add_course_label">Add Course</string>
+    <string name="units_value_1">1</string>
+    <string name="units_value_2">2</string>
+    <string name="units_value_3">3</string>
+    <string name="units_value_4">4</string>
+    <string name="units_value_5">5</string>
+    <string name="semester_label_hint">Semester Label</string>
+    <string name="grade_value_1_0">1.0</string>
+    <string name="grade_value_1_25">1.25</string>
+    <string name="grade_value_1_5">1.5</string>
+    <string name="grade_value_1_75">1.75</string>
+    <string name="grade_value_2_0">2.0</string>
+    <string name="grade_value_2_25">2.25</string>
+    <string name="grade_value_2_5">2.5</string>
+    <string name="grade_value_2_75">2.75</string>
+    <string name="grade_value_3_0">3.0</string>
+    <string name="grade_value_5_0">5.0</string>
+    <string name="sem_label">SEM</string>
+    <string name="sem_value">0.000</string>
 
     <string-array name="grade_array">
         <item>1.0</item>

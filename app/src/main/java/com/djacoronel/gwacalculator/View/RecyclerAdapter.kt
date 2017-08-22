@@ -4,11 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import com.djacoronel.gwacalculator.Model.Course
 import com.djacoronel.gwacalculator.R
 import kotlinx.android.synthetic.main.row_layout.view.*
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 
 
 class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -> Unit) :
@@ -23,19 +23,20 @@ class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -
             ViewHolder(parent.inflate(R.layout.row_layout))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-            holder.bind(courses[position], listener)
+            holder.bind(courses[position])
 
     override fun getItemCount() = courses.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(course: Course, listener: (Course) -> Unit) = with(itemView) {
+        fun bind(course: Course) = with(itemView) {
             courseCodeText.text = course.courseCode
 
             val units = course.units
-            unitsText.text = "${units.toString()} ${if (units == 1) "unit" else "units"}"
+            val unitLabel = "$units ${if (units == 1) "unit" else "units"}"
+            unitsText.text = unitLabel
 
             setOnLongClickListener {
-                (context as MainActivity).showDeletePrompt(course)
+                (context as MainActivity).showDeleteCoursePrompt(course)
                 true
             }
 
