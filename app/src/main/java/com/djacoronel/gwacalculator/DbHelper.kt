@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import org.jetbrains.anko.db.*
 
-class DbHelper(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "mydb") {
+class DbHelper(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "gwaDB") {
     companion object {
         private var instance: DbHelper? = null
 

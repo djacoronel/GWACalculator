@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.gwa_layout.*
 import kotlinx.android.synthetic.main.input_semester_layout.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.selector
+import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), Contract.View {
 
@@ -71,7 +72,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
         })
 
         viewpager.adapter = adapter
-        mPresenter.computeSEM(viewpager.currentItem)
+        if (semesters.isNotEmpty())
+            mPresenter.computeSEM(viewpager.currentItem)
         tabs.setupWithViewPager(viewpager, true)
         setupTabLongClicks()
     }
@@ -109,7 +111,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
             if (i == addChoices.indexOf("Add Semester"))
                 showAddSemester()
             else if (i == addChoices.indexOf("Add Course"))
-                showAddCourse()
+                if (mPresenter.getSemesters().isNotEmpty())
+                    showAddCourse()
+                else
+                    toast("Add a semester first!")
         })
     }
 
