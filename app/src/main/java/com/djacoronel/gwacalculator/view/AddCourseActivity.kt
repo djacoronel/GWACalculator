@@ -1,15 +1,18 @@
-package com.djacoronel.gwacalculator.View
+package com.djacoronel.gwacalculator.view
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.djacoronel.gwacalculator.R
 import kotlinx.android.synthetic.main.activity_add_course.*
 import kotlinx.android.synthetic.main.grade_selection_layout.*
 import kotlinx.android.synthetic.main.units_selection_layout.*
 import org.jetbrains.anko.toast
+
 
 class AddCourseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +25,9 @@ class AddCourseActivity : AppCompatActivity() {
         textViewBindings()
         units_1.setBackgroundResource(R.drawable.circle_highlight)
         grade_1.setBackgroundResource(R.drawable.circle_highlight)
+
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 
     override fun onBackPressed() {
@@ -30,7 +36,7 @@ class AddCourseActivity : AppCompatActivity() {
     }
 
     private fun getInputValues() {
-        val courseCode = semesterInput.text.toString()
+        val courseCode = courseCodeInput.text.toString()
 
         if (courseCode != "") {
             val returnIntent = Intent()
@@ -40,9 +46,8 @@ class AddCourseActivity : AppCompatActivity() {
 
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
-        } else {
+        } else
             toast("Input course code")
-        }
     }
 
     private var selectedUnits = 1

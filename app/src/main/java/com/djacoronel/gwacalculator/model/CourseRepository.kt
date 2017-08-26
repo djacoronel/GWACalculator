@@ -1,4 +1,4 @@
-package com.djacoronel.gwacalculator.Model
+package com.djacoronel.gwacalculator.model
 
 import android.content.Context
 import com.djacoronel.gwacalculator.Contract

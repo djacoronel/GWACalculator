@@ -1,4 +1,4 @@
-package com.djacoronel.gwacalculator.View
+package com.djacoronel.gwacalculator.view
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
-import com.djacoronel.gwacalculator.Model.Course
 import com.djacoronel.gwacalculator.R
+import com.djacoronel.gwacalculator.model.Course
 import kotlinx.android.synthetic.main.row_layout.view.*
 
 
-class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -> Unit) :
+class RecyclerAdapter(private val courses: MutableList<Course>) :
         RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     //extension function to simplify view inflation in an adapter

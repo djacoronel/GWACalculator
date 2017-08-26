@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="25dp">
 
@@ -12,14 +11,15 @@
         android:id="@+id/gwaText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:text="@string/gwa_label"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/colorPrimaryText"
         app:layout_constraintEnd_toEndOf="@+id/gwaValue"
-        android:layout_marginEnd="8dp"
         app:layout_constraintStart_toStartOf="@+id/gwaValue"
-        android:layout_marginStart="8dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/gwaValue"
@@ -31,6 +31,7 @@
         android:text="@string/gwa_value"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,15 +42,16 @@
         android:id="@+id/semText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:text="@string/sem_label"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
-        tools:layout_editor_absoluteY="0dp"
-        app:layout_constraintStart_toStartOf="@+id/semValue"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/semValue"
+        android:textColor="@color/colorPrimaryText"
         app:layout_constraintBottom_toTopOf="@id/semValue"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintEnd_toEndOf="@+id/semValue"
+        app:layout_constraintStart_toStartOf="@+id/semValue"
+        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
         android:id="@+id/semValue"
@@ -61,6 +63,7 @@
         android:text="@string/sem_value"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/gwaValue"
         app:layout_constraintStart_toStartOf="parent"

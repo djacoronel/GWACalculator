@@ -1,5 +1,4 @@
-package com.djacoronel.gwacalculator.Model
-
+package com.djacoronel.gwacalculator.model
 
 class Course(val id: Int,
              val courseCode: String,

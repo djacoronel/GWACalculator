@@ -1,24 +1,28 @@
-package com.djacoronel.gwacalculator.View
+package com.djacoronel.gwacalculator.view
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import com.djacoronel.gwacalculator.Contract
-import com.djacoronel.gwacalculator.Model.Course
-import com.djacoronel.gwacalculator.Model.CourseRepository
-import com.djacoronel.gwacalculator.Presenter.GWACalcPresenter
 import com.djacoronel.gwacalculator.R
+import com.djacoronel.gwacalculator.model.Course
+import com.djacoronel.gwacalculator.model.CourseRepository
+import com.djacoronel.gwacalculator.presenter.GWACalcPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.gwa_layout.*
 import kotlinx.android.synthetic.main.input_semester_layout.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.selector
 import org.jetbrains.anko.toast
+
 
 class MainActivity : AppCompatActivity(), Contract.View {
 
@@ -36,7 +40,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     override fun reloadCourseList(courses: MutableList<Course>) {
-        val recyclerAdapter = RecyclerAdapter(courses) {}
+        val recyclerAdapter = RecyclerAdapter(courses)
         (viewpager.adapter as ViewPagerAdapter)
                 .getRecycler(tabs.selectedTabPosition)
                 .adapter = recyclerAdapter
@@ -74,7 +78,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
         viewpager.adapter = adapter
         if (semesters.isNotEmpty())
             mPresenter.computeSEM()
-        tabs.setupWithViewPager(viewpager, true)
+
+        tabs.setupWithViewPager(viewpager)
         setupTabLongClicks()
     }
 
@@ -82,7 +87,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         val courses = mPresenter.getCourses(semester)
         val semRecycler = RecyclerView(this)
         semRecycler.layoutManager = LinearLayoutManager(this)
-        semRecycler.adapter = RecyclerAdapter(courses) {}
+        semRecycler.adapter = RecyclerAdapter(courses)
 
         return semRecycler
     }
@@ -124,9 +129,11 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     override fun showAddSemester() {
+        val view = View.inflate(this, R.layout.input_semester_layout, null)
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         alert {
             title = "Add Semester"
-            val view = layoutInflater.inflate(R.layout.input_semester_layout, null)
             customView = view
             positiveButton("Add") {
                 val semester = view.semesterInput.text.toString()
@@ -135,9 +142,14 @@ class MainActivity : AppCompatActivity(), Contract.View {
                     showAddSemester()
                     toast("Semester label already used")
                 }
+                imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
             }
-            negativeButton("Cancel") {}
+            negativeButton("Cancel") {
+                imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
+            }
         }.show()
+
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 
     override fun showDeleteCoursePrompt(course: Course) {

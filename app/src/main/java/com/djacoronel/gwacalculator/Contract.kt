@@ -1,6 +1,6 @@
 package com.djacoronel.gwacalculator
 
-import com.djacoronel.gwacalculator.Model.Course
+import com.djacoronel.gwacalculator.model.Course
 
 class Contract{
 

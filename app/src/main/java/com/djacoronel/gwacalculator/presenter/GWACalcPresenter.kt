@@ -1,12 +1,12 @@
-package com.djacoronel.gwacalculator.Presenter
+package com.djacoronel.gwacalculator.presenter
 
 import com.djacoronel.gwacalculator.Contract
-import com.djacoronel.gwacalculator.Model.Course
-import com.djacoronel.gwacalculator.View.MainActivity
+import com.djacoronel.gwacalculator.model.Course
+import com.djacoronel.gwacalculator.view.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class GWACalcPresenter(val view: Contract.View, val repo: Contract.Repository) : Contract.Actions {
+class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repository) : Contract.Actions {
 
     override fun computeGWA() {
         val courses = repo.getAllCourse()

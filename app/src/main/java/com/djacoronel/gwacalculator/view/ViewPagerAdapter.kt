@@ -1,4 +1,4 @@
-package com.djacoronel.gwacalculator.View
+package com.djacoronel.gwacalculator.view
 
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
@@ -19,7 +19,7 @@ class ViewPagerAdapter : PagerAdapter() {
         return addRecycler(recyclerView, semester, mRecyclerList.size)
     }
 
-    fun addRecycler(recyclerView: RecyclerView, semester: String, position: Int): Int {
+    private fun addRecycler(recyclerView: RecyclerView, semester: String, position: Int): Int {
         mRecyclerTitleList.add(semester)
         mRecyclerList.add(position, recyclerView)
         notifyDataSetChanged()
@@ -30,9 +30,10 @@ class ViewPagerAdapter : PagerAdapter() {
         return removeRecycler(pager, mRecyclerTitleList.indexOf(semester))
     }
 
-    fun removeRecycler(pager: ViewPager, position: Int): Int {
+    private fun removeRecycler(pager: ViewPager, position: Int): Int {
         pager.adapter = null
         mRecyclerList.removeAt(position)
+        mRecyclerTitleList.removeAt(position)
         pager.adapter = this
         notifyDataSetChanged()
         return position

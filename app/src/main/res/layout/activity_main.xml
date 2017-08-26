@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.djacoronel.gwacalculator.View.MainActivity">
+    tools:context="com.djacoronel.gwacalculator.view.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,6 +22,8 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabTextColor="@color/colorPrimaryText"
+            app:tabSelectedTextColor="@color/colorPrimaryText"
             app:tabMode="scrollable"
             app:tabGravity="fill" />
     </android.support.design.widget.AppBarLayout>
