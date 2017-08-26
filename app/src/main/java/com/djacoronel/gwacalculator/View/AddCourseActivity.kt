@@ -20,6 +20,8 @@ class AddCourseActivity : AppCompatActivity() {
         addCourseButton.setOnClickListener { getInputValues() }
 
         textViewBindings()
+        units_1.setBackgroundResource(R.drawable.circle_highlight)
+        grade_1.setBackgroundResource(R.drawable.circle_highlight)
     }
 
     override fun onBackPressed() {
@@ -27,10 +29,10 @@ class AddCourseActivity : AppCompatActivity() {
         finish()
     }
 
-    fun getInputValues() {
+    private fun getInputValues() {
         val courseCode = semesterInput.text.toString()
 
-        if (selectedUnits != 0 && selectedGrade != 0.0 && courseCode != "") {
+        if (courseCode != "") {
             val returnIntent = Intent()
             returnIntent.putExtra("courseCodeInput", courseCode)
             returnIntent.putExtra("unitsInput", selectedUnits)
@@ -39,25 +41,14 @@ class AddCourseActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
         } else {
-            var userWarning = "Select course "
-
-            if (selectedUnits == 0 && selectedGrade == 0.0 && courseCode == "")
-                userWarning = "Provide course info"
-            else if (courseCode == "")
-                userWarning = "Input course code"
-            else if (selectedUnits == 0)
-                userWarning += "units"
-            else if (selectedGrade == 0.0)
-                userWarning += "grade"
-
-            toast(userWarning)
+            toast("Input course code")
         }
     }
 
-    var selectedUnits = 0
-    var selectedGrade = 0.0
+    private var selectedUnits = 1
+    private var selectedGrade = 1.0
 
-    fun setSelectedUnits(selected: TextView) {
+    private fun setSelectedUnits(selected: TextView) {
         selected.setBackgroundResource(R.drawable.circle_highlight)
         selectedUnits = selected.text.toString().toInt()
 
@@ -68,7 +59,7 @@ class AddCourseActivity : AppCompatActivity() {
         if (selected != units_5) units_5.setBackgroundResource(0)
     }
 
-    fun setSelectedGrade(selected: TextView) {
+    private fun setSelectedGrade(selected: TextView) {
         selected.setBackgroundResource(R.drawable.circle_highlight)
         selectedGrade = selected.text.toString().toDouble()
 
@@ -84,7 +75,7 @@ class AddCourseActivity : AppCompatActivity() {
         if (grade_5 != selected) grade_5.setBackgroundResource(0)
     }
 
-    fun textViewBindings() {
+    private fun textViewBindings() {
         units_1.setOnClickListener { setSelectedUnits(units_1) }
         units_2.setOnClickListener { setSelectedUnits(units_2) }
         units_3.setOnClickListener { setSelectedUnits(units_3) }

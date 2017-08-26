@@ -15,7 +15,7 @@ class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -
         RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     //extension function to simplify view inflation in an adapter
-    fun ViewGroup.inflate(layoutRes: Int): View {
+    private fun ViewGroup.inflate(layoutRes: Int): View {
         return LayoutInflater.from(context).inflate(layoutRes, this, false)
     }
 
@@ -50,7 +50,6 @@ class RecyclerAdapter(val courses: MutableList<Course>, val listener: (Course) -
                                             position: Int, id: Long) {
                     course.grade = parentView.getItemAtPosition(position).toString().toDouble()
                     (context as MainActivity).mPresenter.updateCourse(course)
-                    (context as MainActivity).mPresenter.computeGWA()
                 }
             }
         }

@@ -6,10 +6,10 @@ import com.djacoronel.gwacalculator.DbHelper
 import org.jetbrains.anko.db.*
 
 class CourseRepository(mContext: Context) : Contract.Repository {
-    val database = DbHelper.getInstance(mContext)
+    private val database = DbHelper.getInstance(mContext)
 
     override fun getCourse(courseCode: String): Course {
-        var course = Course("CC", 0, 0.0, "1st Semester")
+        var course = Course(0, "CC", 0, 0.0, "1st Semester")
         database.use {
             select("Course")
                     .whereArgs("(courseCode = {courseCode})",
@@ -30,7 +30,6 @@ class CourseRepository(mContext: Context) : Contract.Repository {
     }
 
     override fun addCourse(course: Course): Boolean {
-        if (getCourse(course.courseCode).courseCode == "CC") {
             database.use {
                 insert("Course",
                         "courseCode" to course.courseCode,
@@ -39,16 +38,13 @@ class CourseRepository(mContext: Context) : Contract.Repository {
                         "semester" to course.semester)
             }
             return true
-        }
-        else
-            return false
     }
 
     override fun updateCourse(course: Course){
         database.use {
             update("Course", "grade" to course.grade)
-                    .whereArgs("courseCode = {courseCode}",
-                            "courseCode" to course.courseCode)
+                    .whereArgs("id = {id}",
+                            "id" to course.id)
                     .exec()
         }
     }

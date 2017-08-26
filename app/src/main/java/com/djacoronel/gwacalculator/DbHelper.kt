@@ -19,7 +19,8 @@ class DbHelper(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "gwaDB") {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable("Course", true,
-                "courseCode" to TEXT + PRIMARY_KEY,
+                "id" to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                "courseCode" to TEXT,
                 "units" to INTEGER,
                 "grade" to REAL,
                 "semester" to TEXT)

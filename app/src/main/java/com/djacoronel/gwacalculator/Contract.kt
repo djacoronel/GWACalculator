@@ -20,7 +20,7 @@ class Contract{
 
     interface Actions{
         fun computeGWA()
-        fun computeSEM(position: Int)
+        fun computeSEM()
         fun getCourse(courseCode: String): Course
         fun addCourse(course: Course)
         fun removeCourse(course: Course)
@@ -29,7 +29,7 @@ class Contract{
         fun onChangeGrade(course: Course)
         fun getCourses(semester: String): MutableList<Course>
         fun getSemesters(): MutableList<String>
-        fun addSemester(semester: String)
+        fun addSemester(semester: String): Boolean
         fun removeSemester(semester: String)
     }
 

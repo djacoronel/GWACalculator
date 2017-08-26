@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
-                mPresenter.computeSEM(position)
+                mPresenter.computeSEM()
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
@@ -73,12 +73,12 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
         viewpager.adapter = adapter
         if (semesters.isNotEmpty())
-            mPresenter.computeSEM(viewpager.currentItem)
+            mPresenter.computeSEM()
         tabs.setupWithViewPager(viewpager, true)
         setupTabLongClicks()
     }
 
-    fun setupRecycler(semester: String): RecyclerView {
+    private fun setupRecycler(semester: String): RecyclerView {
         val courses = mPresenter.getCourses(semester)
         val semRecycler = RecyclerView(this)
         semRecycler.layoutManager = LinearLayoutManager(this)
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     override fun showAddPrompt() {
-        val addChoices = listOf("Add Semester", "Add Course")
+        val addChoices = listOf("Add Course", "Add Semester")
         selector("Which do you want to add?", addChoices, { _, i ->
             if (i == addChoices.indexOf("Add Semester"))
                 showAddSemester()
@@ -131,7 +131,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
             positiveButton("Add") {
                 val semester = view.semesterInput.text.toString()
 
-                mPresenter.addSemester(semester)
+                if (!mPresenter.addSemester(semester)) {
+                    showAddSemester()
+                    toast("Semester label already used")
+                }
             }
             negativeButton("Cancel") {}
         }.show()
@@ -165,8 +168,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 val grade = data.getDoubleExtra("gradeInput", 0.0)
                 val semester = viewpager.adapter.getPageTitle(viewpager.currentItem) as String
 
-                mPresenter.addCourse(Course(courseCode, units, grade, semester))
-                mPresenter.computeSEM(viewpager.currentItem)
+                mPresenter.addCourse(Course(0, courseCode, units, grade, semester))
+                mPresenter.computeSEM()
             }
         } else if (requestCode == 2) {
 
