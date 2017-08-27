@@ -2,9 +2,9 @@ package com.djacoronel.gwacalculator
 
 import com.djacoronel.gwacalculator.model.Course
 
-class Contract{
+class Contract {
 
-    interface View{
+    interface View {
         fun updateGWA(gwa: Double)
         fun updateSEM(sem: Double)
         fun showAddPrompt()
@@ -12,13 +12,14 @@ class Contract{
         fun showDeleteSemesterPrompt(semester: String)
         fun showAddSemester()
         fun showAddCourse()
-        fun reloadCourseList(courses: MutableList<Course>)
         fun setupViewPager()
         fun removeSemesterRecycler(semester: String)
         fun addSemesterRecycler(semester: String)
+        fun addCourse(course: Course)
+        fun removeCourse(course: Course)
     }
 
-    interface Actions{
+    interface Actions {
         fun computeGWA()
         fun computeSEM()
         fun getCourse(courseCode: String): Course
@@ -33,7 +34,7 @@ class Contract{
         fun removeSemester(semester: String)
     }
 
-    interface Repository{
+    interface Repository {
         fun getCourse(courseCode: String): Course
         fun getAllCourse(): MutableList<Course>
         fun addCourse(course: Course): Boolean

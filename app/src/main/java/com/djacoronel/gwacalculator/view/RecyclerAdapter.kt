@@ -4,14 +4,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import com.djacoronel.gwacalculator.R
 import com.djacoronel.gwacalculator.model.Course
 import kotlinx.android.synthetic.main.row_layout.view.*
 
 
-class RecyclerAdapter(private val courses: MutableList<Course>) :
+class RecyclerAdapter(val courses: MutableList<Course>) :
         RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     //extension function to simplify view inflation in an adapter
@@ -40,17 +38,9 @@ class RecyclerAdapter(private val courses: MutableList<Course>) :
                 true
             }
 
-            val grades = resources.getStringArray(R.array.grade_array)
-            gradesDropDown.setSelection(grades.indexOf(course.grade.toString()))
-            gradesDropDown.onItemSelectedListener = object : OnItemSelectedListener {
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                }
-
-                override fun onItemSelected(parentView: AdapterView<*>, view: View,
-                                            position: Int, id: Long) {
-                    course.grade = parentView.getItemAtPosition(position).toString().toDouble()
-                    (context as MainActivity).mPresenter.updateCourse(course)
-                }
+            gradesEdit.text = course.grade.toString()
+            gradesEdit.setOnClickListener {
+                (context as MainActivity).showChangeGradePrompt(course, gradesEdit)
             }
         }
     }

@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.InputFilter
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.djacoronel.gwacalculator.R
@@ -13,14 +16,25 @@ import kotlinx.android.synthetic.main.grade_selection_layout.*
 import kotlinx.android.synthetic.main.units_selection_layout.*
 import org.jetbrains.anko.toast
 
-
 class AddCourseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_course)
 
+        //forces all cap in input
+        val filters = courseCodeInput.filters.toMutableList()
+        filters.add(InputFilter.AllCaps())
+        courseCodeInput.filters = filters.toTypedArray()
+
         val addCourseButton = add_course_button
-        addCourseButton.setOnClickListener { getInputValues() }
+        addCourseButton.setOnClickListener { onAddButtonPressed() }
+
+        courseCodeInput.setOnKeyListener({ _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
+                onAddButtonPressed()
+            }
+            false
+        })
 
         textViewBindings()
         units_1.setBackgroundResource(R.drawable.circle_highlight)
@@ -35,7 +49,7 @@ class AddCourseActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun getInputValues() {
+    private fun onAddButtonPressed() {
         val courseCode = courseCodeInput.text.toString()
 
         if (courseCode != "") {
@@ -43,6 +57,10 @@ class AddCourseActivity : AppCompatActivity() {
             returnIntent.putExtra("courseCodeInput", courseCode)
             returnIntent.putExtra("unitsInput", selectedUnits)
             returnIntent.putExtra("gradeInput", selectedGrade)
+
+            //Hide the keyboard on finish activity
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                    .hideSoftInputFromWindow(courseCodeInput.windowToken, 0)
 
             setResult(Activity.RESULT_OK, returnIntent)
             finish()

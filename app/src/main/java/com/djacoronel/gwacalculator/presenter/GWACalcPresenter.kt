@@ -53,14 +53,14 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
 
     override fun addCourse(course: Course) {
         repo.addCourse(course)
-        view.reloadCourseList(getCourses(course.semester))
+        view.addCourse(course)
         computeGWA()
         computeSEM()
     }
 
     override fun removeCourse(course: Course) {
         repo.removeCourse(course)
-        view.reloadCourseList(getCourses(course.semester))
+        view.removeCourse(course)
         computeGWA()
         computeSEM()
     }

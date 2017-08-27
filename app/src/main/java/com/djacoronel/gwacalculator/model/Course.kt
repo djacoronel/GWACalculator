@@ -1,6 +1,6 @@
 package com.djacoronel.gwacalculator.model
 
-class Course(val id: Int,
+class Course(var id: Int,
              val courseCode: String,
              val units: Int,
              var grade: Double,

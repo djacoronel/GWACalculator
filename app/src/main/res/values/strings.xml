@@ -25,6 +25,17 @@
     <string name="grade_value_5_0">5.0</string>
     <string name="sem_label">SEM</string>
     <string name="sem_value">0.000</string>
+    <string name="add_semester_label">Add Semester</string>
+    <string name="add_prompt_title">Which do you want to add?</string>
+    <string name="add_semester_warning">Add a semester first!</string>
+    <string name="add_semester_label_warning">Semester label already used</string>
+    <string name="add_button_label">Add</string>
+    <string name="cancel_button_label">Cancel</string>
+    <string name="delete_course_title">Delete Course?</string>
+    <string name="delete_button_label">Delete</string>
+    <string name="delete_semester_title">Delete Semester?</string>
+    <string name="blank_sem_label_warning">Semester label is required</string>
+    <string name="row_grade_text">1.0</string>
 
     <string-array name="grade_array">
         <item>1.0</item>

@@ -1,0 +1,16 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <rotate
+            android:fromDegrees="45"
+            android:pivotX="1%"
+            android:pivotY="135%"
+            android:toDegrees="45">
+            <shape android:shape="rectangle">
+                <stroke
+                    android:width="-6dp"
+                    android:color="@android:color/transparent" />
+                <solid android:color="@color/colorAccent" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

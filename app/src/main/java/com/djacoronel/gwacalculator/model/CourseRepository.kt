@@ -31,11 +31,12 @@ class CourseRepository(mContext: Context) : Contract.Repository {
 
     override fun addCourse(course: Course): Boolean {
             database.use {
-                insert("Course",
+                val id = insert("Course",
                         "courseCode" to course.courseCode,
                         "units" to course.units,
                         "grade" to course.grade,
                         "semester" to course.semester)
+                course.id = id.toInt()
             }
             return true
     }
