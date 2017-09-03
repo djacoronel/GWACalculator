@@ -6,10 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.InputFilter
-import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -106,12 +106,11 @@ class MainActivity : AppCompatActivity(), Contract.View {
         semRecycler.layoutManager = LinearLayoutManager(this)
         semRecycler.adapter = RecyclerAdapter(courses)
 
-        val padding = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                8.toFloat(),
-                resources.displayMetrics).toInt()
-        semRecycler.setPadding(padding, padding, padding, padding)
-        semRecycler.clipToPadding = false
+        val mDividerItemDecoration = DividerItemDecoration(
+                semRecycler.context,
+                (semRecycler.layoutManager as LinearLayoutManager).orientation
+        )
+        semRecycler.addItemDecoration(mDividerItemDecoration)
 
         return semRecycler
     }

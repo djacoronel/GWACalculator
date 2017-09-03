@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="0.5dp"
-    app:cardCornerRadius="1dp">
+    app:cardElevation="0dp">
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -73,6 +72,7 @@
             app:srcCompat="@drawable/corner"
             tools:layout_editor_absoluteY="33dp"
             tools:layout_editor_absoluteX="351dp"
+            android:contentDescription="@string/grade_selection_indicator"
             android:layout_marginRight="8dp" />
 
     </android.support.constraint.ConstraintLayout>

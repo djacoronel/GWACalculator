@@ -36,6 +36,7 @@
     <string name="delete_semester_title">Delete Semester?</string>
     <string name="blank_sem_label_warning">Semester label is required</string>
     <string name="row_grade_text">1.0</string>
+    <string name="grade_selection_indicator">Grade selection indicator</string>
 
     <string-array name="grade_array">
         <item>1.0</item>
