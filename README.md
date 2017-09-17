@@ -1,6 +1,8 @@
 # GWACalculator
 University general weighted average grade calculator made using Kotlin, Anko db, and the MVP(Model, View, Presenter) pattern.
 
-![Optional Text](../master/screenshots/screen1.png)
-![Optional Text](../master/screenshots/screen2.png)
-![Optional Text](../master/screenshots/screen3.png)
+<p>
+  <img src="../master/screenshots/screen1.png" width="250"/>
+  <img src="../master/screenshots/screen2.png" width="250"/>
+  <img src="../master/screenshots/screen3.png" width="250"/>
+</p>
