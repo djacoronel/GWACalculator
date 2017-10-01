@@ -10,6 +10,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.InputFilter
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -111,6 +112,13 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 (semRecycler.layoutManager as LinearLayoutManager).orientation
         )
         semRecycler.addItemDecoration(mDividerItemDecoration)
+
+        val bottomPadding = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                80.toFloat(),
+                resources.displayMetrics).toInt()
+        semRecycler.setPadding(0, 0, 0, bottomPadding)
+        semRecycler.clipToPadding = false
 
         return semRecycler
     }
