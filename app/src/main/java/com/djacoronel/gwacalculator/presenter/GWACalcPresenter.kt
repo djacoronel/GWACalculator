@@ -14,7 +14,10 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
 
         if (courses.isNotEmpty()) {
             val sum = courses.sumByDouble { it.grade * it.units }
-            val totalUnits = courses.sumBy { it.units }
+            val totalUnits = courses
+                    .filter { it.grade != 0.0 }
+                    .sumBy { it.units }
+
             gwa = sum / totalUnits
         }
 
@@ -31,7 +34,9 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
 
             if (courses.isNotEmpty()) {
                 val sum = courses.sumByDouble { it.grade * it.units }
-                val totalUnits = courses.sumBy { it.units }
+                val totalUnits = courses
+                        .filter { it.grade != 0.0 }
+                        .sumBy { it.units }
                 sem = sum / totalUnits
             }
         }
