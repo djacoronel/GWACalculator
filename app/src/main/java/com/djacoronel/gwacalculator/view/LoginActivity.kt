@@ -1,9 +1,10 @@
-package com.djacoronel.gwacalculator
+package com.djacoronel.gwacalculator.view
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.djacoronel.gwacalculator.R
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
 

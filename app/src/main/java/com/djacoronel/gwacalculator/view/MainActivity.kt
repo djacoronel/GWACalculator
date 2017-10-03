@@ -1,10 +1,8 @@
 package com.djacoronel.gwacalculator.view
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
@@ -12,18 +10,17 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.InputFilter
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.djacoronel.gwacalculator.Contract
-import com.djacoronel.gwacalculator.LoginActivity
 import com.djacoronel.gwacalculator.R
 import com.djacoronel.gwacalculator.model.Course
 import com.djacoronel.gwacalculator.model.CourseRepository
 import com.djacoronel.gwacalculator.presenter.GWACalcPresenter
+import com.djacoronel.gwacalculator.utility.Contract
+import com.djacoronel.gwacalculator.utility.MyUsteGradesFetcherTask
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.grade_selection_layout.view.*
 import kotlinx.android.synthetic.main.gwa_layout.*
@@ -31,8 +28,6 @@ import kotlinx.android.synthetic.main.input_semester_layout.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.selector
 import org.jetbrains.anko.toast
-import org.jsoup.Connection
-import org.jsoup.Jsoup
 
 
 class MainActivity : AppCompatActivity(), Contract.View {
@@ -192,7 +187,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         })
     }
 
-    fun showLogin() {
+    private fun showLogin() {
         val I = Intent(this, LoginActivity::class.java)
         startActivityForResult(I, 2)
     }
@@ -269,112 +264,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 val studNo = data.getStringExtra("studNo")
                 val password = data.getStringExtra("password")
 
-                MyUste().execute(studNo, password)
+                MyUsteGradesFetcherTask(mPresenter, this).execute(studNo, password)
             }
-        }
-    }
-
-    private inner class MyUste : AsyncTask<String, Void, ArrayList<ArrayList<Course>>>() {
-        internal lateinit var mProgressDialog: ProgressDialog
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-            mProgressDialog = ProgressDialog(this@MainActivity)
-            mProgressDialog.setTitle("Fetching grades from MyUste")
-            mProgressDialog.setMessage("Loading...")
-            mProgressDialog.isIndeterminate = false
-            mProgressDialog.show()
-        }
-
-        override fun doInBackground(vararg params: String): ArrayList<ArrayList<Course>> {
-            val studNo = params[0]
-            val password = params[1]
-
-            val sems = arrayListOf<ArrayList<Course>>()
-
-            try {
-                HttpsTrustManager.allowAllSSL()
-                val url = "https://myuste.ust.edu.ph/student"
-                val userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36"
-
-                val firstResponse: Connection.Response = Jsoup.connect(url).userAgent(userAgent)
-                        .method(Connection.Method.GET)
-                        .execute()
-
-                var response = Jsoup.connect("https://myuste.ust.edu.ph/student/loginProcess")
-                        .cookies(firstResponse.cookies())
-                        .data("txtUsername", studNo)
-                        .data("txtPassword", password)
-                        .userAgent(userAgent)
-                        .method(Connection.Method.POST)
-                        .followRedirects(true)
-                        .execute()
-
-                var doc = Jsoup.connect("https://myuste.ust.edu.ph/student/myGrades.jsp")
-                        .cookies(firstResponse.cookies())
-                        .userAgent(userAgent)
-                        .get()
-
-                val semLinks = doc.select("a#link_style1")
-
-                for (semLink in semLinks.reversed()) {
-                    val href = semLink.attr("href")
-                    doc = Jsoup.connect("https://myuste.ust.edu.ph/student/" + href)
-                            .cookies(firstResponse.cookies())
-                            .userAgent(userAgent)
-                            .get()
-
-                    val table = doc.select("table#grades_table")
-
-                    val rows = table[0].select("tr")
-
-                    rows.removeAt(0)
-
-                    val courses = arrayListOf<Course>()
-                    for (row in rows) {
-
-                        val courseCode = row.select("td")[0].text()
-                        val courseName = row.select("td")[1].text()
-                        var units = row.select("td")[2].text().toInt()
-                        units += row.select("td")[3].text().toInt()
-
-                        var grade = 0.0
-                        val gradeText = row.select("td")[5].text()
-
-                        if (gradeText.trim().isNotEmpty())
-                            grade = gradeText.toDouble()
-                        if (!courseCode.contains("PE") and !courseCode.contains("NSTP"))
-                            courses.add(Course(0, courseCode, units, grade, ""))
-                        Log.i("ROW:", "$courseCode $courseName $units $grade")
-                    }
-                    sems.add(courses)
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return sems
-        }
-
-        override fun onPostExecute(sems: ArrayList<ArrayList<Course>>) {
-            if (sems.isEmpty())
-                toast("Failed to fetch grades")
-            else {
-                val storedSems = mPresenter.getSemesters()
-                for (sem in storedSems)
-                    mPresenter.removeSemester(sem)
-
-                var semNum = 0
-                for (sem in sems) {
-                    mPresenter.addSemester("Sem ${++semNum}")
-                    val semester = viewpager.adapter.getPageTitle(viewpager.currentItem) as String
-                    for (course in sem) {
-                        mPresenter.addCourse(Course(0, course.courseCode, course.units, course.grade, semester))
-                    }
-                }
-            }
-            mProgressDialog.dismiss()
-
         }
     }
 }

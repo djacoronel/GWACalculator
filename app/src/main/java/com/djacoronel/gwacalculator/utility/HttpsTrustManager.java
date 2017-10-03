@@ -1,4 +1,4 @@
-package com.djacoronel.gwacalculator.view;
+package com.djacoronel.gwacalculator.utility;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;

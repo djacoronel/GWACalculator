@@ -40,6 +40,7 @@ class AddCourseActivity : AppCompatActivity() {
         units_1.setBackgroundResource(R.drawable.circle_highlight)
         grade_1.setBackgroundResource(R.drawable.circle_highlight)
 
+        //Shows keyboard on activity start
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }

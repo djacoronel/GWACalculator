@@ -1,7 +1,7 @@
 package com.djacoronel.gwacalculator.presenter
 
-import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
+import com.djacoronel.gwacalculator.utility.Contract
 import com.djacoronel.gwacalculator.view.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -9,15 +9,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repository) : Contract.Actions {
 
     override fun computeGWA() {
-        val courses = repo.getAllCourse()
+        val courses = repo.getAllCourse().filter { it.grade != 0.0 }
         var gwa = 0.0
 
         if (courses.isNotEmpty()) {
             val sum = courses.sumByDouble { it.grade * it.units }
-            val totalUnits = courses
-                    .filter { it.grade != 0.0 }
-                    .sumBy { it.units }
-
+            val totalUnits = courses.sumBy { it.units }
             gwa = sum / totalUnits
         }
 
@@ -30,13 +27,11 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         var sem = 0.0
 
         if (semesters.isNotEmpty()) {
-            val courses = repo.getCourses(semesters[position])
+            val courses = repo.getCourses(semesters[position]).filter { it.grade != 0.0 }
 
             if (courses.isNotEmpty()) {
                 val sum = courses.sumByDouble { it.grade * it.units }
-                val totalUnits = courses
-                        .filter { it.grade != 0.0 }
-                        .sumBy { it.units }
+                val totalUnits = courses.sumBy { it.units }
                 sem = sum / totalUnits
             }
         }
@@ -102,5 +97,4 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         computeGWA()
         computeSEM()
     }
-
 }

@@ -1,4 +1,4 @@
-package com.djacoronel.gwacalculator
+package com.djacoronel.gwacalculator.utility
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -33,5 +33,5 @@ class DbHelper(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "gwaDB") {
 
     // Access property for Context
     val Context.database: DbHelper
-        get() = DbHelper.getInstance(applicationContext)
+        get() = getInstance(applicationContext)
 }

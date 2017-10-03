@@ -1,4 +1,4 @@
-package com.djacoronel.gwacalculator
+package com.djacoronel.gwacalculator.utility
 
 import com.djacoronel.gwacalculator.model.Course
 
