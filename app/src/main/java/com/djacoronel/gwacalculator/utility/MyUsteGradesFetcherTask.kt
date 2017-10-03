@@ -41,7 +41,7 @@ class MyUsteGradesFetcherTask(
             for (semLink in semLinks.reversed()) {
                 val rows = getRowsFromGradesTable(semLink, cookies)
                 val semName = generateSemName(semLink)
-                rows.filter { isIrrelevantRow(it) }.mapTo(courses) { createCourse(it, semName) }
+                rows.filter { isRelevantRow(it) }.mapTo(courses) { createCourse(it, semName) }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -105,7 +105,7 @@ class MyUsteGradesFetcherTask(
         return "SY$startYear-$endYear, $semNum"
     }
 
-    private fun isIrrelevantRow(row: Element): Boolean {
+    private fun isRelevantRow(row: Element): Boolean {
         val pe = "PE"
         val nstp = "NSTP"
         val header = "Subject Name"

@@ -13,8 +13,8 @@ class Contract {
         fun showAddSemester()
         fun showAddCourse()
         fun setupViewPager()
-        fun removeSemesterRecycler(semester: String)
         fun addSemesterRecycler(semester: String)
+        fun removeSemesterRecycler(semester: String)
         fun addCourse(course: Course)
         fun removeCourse(course: Course)
     }

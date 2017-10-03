@@ -17,41 +17,75 @@ import kotlinx.android.synthetic.main.units_selection_layout.*
 import org.jetbrains.anko.toast
 
 class AddCourseActivity : AppCompatActivity() {
+
+    private lateinit var gradeViews: List<TextView>
+    private lateinit var unitViews: List<TextView>
+    private var selectedUnits = 0
+    private var selectedGrade = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_course)
 
-        //forces all cap in input
-        val filters = courseCodeInput.filters.toMutableList()
+        unitViews = listOf(units_1, units_2, units_3, units_4, units_5)
+        gradeViews = listOf(grade_1, grade_1_25, grade_1_5, grade_1_75, grade_2,
+                grade_2_25, grade_1_5, grade_1_75, grade_3, grade_5)
+
+        setupTextViewBindings()
+        add_course_button.setOnClickListener { saveInputsAndReturn() }
+
+        //Set default selected values
+        setSelectedUnits(units_1)
+        setSelectedGrade(grade_1)
+
+        //Forces all cap in input
+        val filters = course_code_input.filters.toMutableList()
         filters.add(InputFilter.AllCaps())
-        courseCodeInput.filters = filters.toTypedArray()
+        course_code_input.filters = filters.toTypedArray()
 
-        val addCourseButton = add_course_button
-        addCourseButton.setOnClickListener { onAddButtonPressed() }
-
-        courseCodeInput.setOnKeyListener({ _, keyCode, event ->
+        //Add course on enter key pressed
+        course_code_input.setOnKeyListener({ _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
-                onAddButtonPressed()
+                saveInputsAndReturn()
             }
             false
         })
-
-        textViewBindings()
-        units_1.setBackgroundResource(R.drawable.circle_highlight)
-        grade_1.setBackgroundResource(R.drawable.circle_highlight)
 
         //Shows keyboard on activity start
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 
-    override fun onBackPressed() {
-        setResult(Activity.RESULT_CANCELED, Intent())
-        finish()
+    private fun setupTextViewBindings() {
+        for (unitView in unitViews) {
+            unitView.setOnClickListener { setSelectedUnits(unitView) }
+        }
+
+        for (gradeView in gradeViews) {
+            gradeView.setOnClickListener { setSelectedGrade(gradeView) }
+        }
     }
 
-    private fun onAddButtonPressed() {
-        val courseCode = courseCodeInput.text.toString()
+    private fun setSelectedUnits(selected: TextView) {
+        selected.setBackgroundResource(R.drawable.circle_highlight)
+        selectedUnits = selected.text.toString().toInt()
+
+        unitViews
+                .filter { it != selected }
+                .forEach { it.setBackgroundResource(0) }
+    }
+
+    private fun setSelectedGrade(selected: TextView) {
+        selected.setBackgroundResource(R.drawable.circle_highlight)
+        selectedGrade = selected.text.toString().toDouble()
+
+        gradeViews
+                .filter { it != selected }
+                .forEach { it.setBackgroundResource(0) }
+    }
+
+    private fun saveInputsAndReturn() {
+        val courseCode = course_code_input.text.toString()
 
         if (courseCode != "") {
             val returnIntent = Intent()
@@ -61,7 +95,7 @@ class AddCourseActivity : AppCompatActivity() {
 
             //Hide the keyboard on finish activity
             (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                    .hideSoftInputFromWindow(courseCodeInput.windowToken, 0)
+                    .hideSoftInputFromWindow(course_code_input.windowToken, 0)
 
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
@@ -69,52 +103,8 @@ class AddCourseActivity : AppCompatActivity() {
             toast("Input course code")
     }
 
-    private var selectedUnits = 1
-    private var selectedGrade = 1.0
-
-    private fun setSelectedUnits(selected: TextView) {
-        selected.setBackgroundResource(R.drawable.circle_highlight)
-        selectedUnits = selected.text.toString().toInt()
-
-        if (selected != units_1) units_1.setBackgroundResource(0)
-        if (selected != units_2) units_2.setBackgroundResource(0)
-        if (selected != units_3) units_3.setBackgroundResource(0)
-        if (selected != units_4) units_4.setBackgroundResource(0)
-        if (selected != units_5) units_5.setBackgroundResource(0)
-    }
-
-    private fun setSelectedGrade(selected: TextView) {
-        selected.setBackgroundResource(R.drawable.circle_highlight)
-        selectedGrade = selected.text.toString().toDouble()
-
-        if (grade_1 != selected) grade_1.setBackgroundResource(0)
-        if (grade_1_25 != selected) grade_1_25.setBackgroundResource(0)
-        if (grade_1_5 != selected) grade_1_5.setBackgroundResource(0)
-        if (grade_1_75 != selected) grade_1_75.setBackgroundResource(0)
-        if (grade_2 != selected) grade_2.setBackgroundResource(0)
-        if (grade_2_25 != selected) grade_2_25.setBackgroundResource(0)
-        if (grade_2_5 != selected) grade_2_5.setBackgroundResource(0)
-        if (grade_2_75 != selected) grade_2_75.setBackgroundResource(0)
-        if (grade_3 != selected) grade_3.setBackgroundResource(0)
-        if (grade_5 != selected) grade_5.setBackgroundResource(0)
-    }
-
-    private fun textViewBindings() {
-        units_1.setOnClickListener { setSelectedUnits(units_1) }
-        units_2.setOnClickListener { setSelectedUnits(units_2) }
-        units_3.setOnClickListener { setSelectedUnits(units_3) }
-        units_4.setOnClickListener { setSelectedUnits(units_4) }
-        units_5.setOnClickListener { setSelectedUnits(units_5) }
-
-        grade_1.setOnClickListener { setSelectedGrade(grade_1) }
-        grade_1_25.setOnClickListener { setSelectedGrade(grade_1_25) }
-        grade_1_5.setOnClickListener { setSelectedGrade(grade_1_5) }
-        grade_1_75.setOnClickListener { setSelectedGrade(grade_1_75) }
-        grade_2.setOnClickListener { setSelectedGrade(grade_2) }
-        grade_2_25.setOnClickListener { setSelectedGrade(grade_2_25) }
-        grade_2_5.setOnClickListener { setSelectedGrade(grade_2_5) }
-        grade_2_75.setOnClickListener { setSelectedGrade(grade_2_75) }
-        grade_3.setOnClickListener { setSelectedGrade(grade_3) }
-        grade_5.setOnClickListener { setSelectedGrade(grade_5) }
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED, Intent())
+        finish()
     }
 }

@@ -151,16 +151,12 @@ class MainActivity : AppCompatActivity(), Contract.View {
             customView = view
         }.show()
 
-        view.grade_1.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_1.text) }
-        view.grade_1_25.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_1_25.text) }
-        view.grade_1_5.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_1_5.text) }
-        view.grade_1_75.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_1_75.text) }
-        view.grade_2.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_2.text) }
-        view.grade_2_25.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_2_25.text) }
-        view.grade_2_5.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_2_5.text) }
-        view.grade_2_75.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_2_75.text) }
-        view.grade_3.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_3.text) }
-        view.grade_5.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, view.grade_5.text) }
+        val gradeViews = listOf(view.grade_1, view.grade_1_25, view.grade_1_5, view.grade_1_75, view.grade_2,
+                view.grade_2_25, view.grade_1_5, view.grade_1_75, view.grade_3, view.grade_5)
+
+        for (gradeView in gradeViews) {
+            gradeView.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, gradeView.text) }
+        }
     }
 
     private fun setGrade(course: Course, gradeText: TextView, newGrade: CharSequence) {
