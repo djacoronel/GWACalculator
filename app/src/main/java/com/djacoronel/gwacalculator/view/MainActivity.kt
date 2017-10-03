@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
     lateinit var mPresenter: Contract.Actions
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -188,8 +189,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     private fun showLogin() {
-        val I = Intent(this, LoginActivity::class.java)
-        startActivityForResult(I, 2)
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivityForResult(intent, 2)
     }
 
     override fun showAddCourse() {

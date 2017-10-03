@@ -31,7 +31,4 @@ class DbHelper(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "gwaDB") {
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
     }
 
-    // Access property for Context
-    val Context.database: DbHelper
-        get() = getInstance(applicationContext)
 }

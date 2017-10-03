@@ -12,7 +12,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class HttpsTrustManager implements X509TrustManager {
+class HttpsTrustManager implements X509TrustManager {
     private static TrustManager[] trustManagers;
     private static final X509Certificate[] _AcceptedIssuers = new X509Certificate[]{};
 
@@ -26,14 +26,6 @@ public class HttpsTrustManager implements X509TrustManager {
     public void checkServerTrusted(
             X509Certificate[] x509Certificates, String s)
             throws java.security.cert.CertificateException {
-    }
-
-    public boolean isClientTrusted(X509Certificate[] chain) {
-        return true;
-    }
-
-    public boolean isServerTrusted(X509Certificate[] chain) {
-        return true;
     }
 
     @Override

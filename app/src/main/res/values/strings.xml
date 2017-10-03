@@ -37,6 +37,10 @@
     <string name="blank_sem_label_warning">Semester label is required</string>
     <string name="row_grade_text">1.0</string>
     <string name="grade_selection_indicator">Grade selection indicator</string>
+    <string name="student_number_hint">Student Number</string>
+    <string name="password_hint">Password</string>
+    <string name="fetch_grades_button_label">Fetch Grades</string>
+    <string name="fetch_grades_description">Login to MyUste to fetch grades</string>
 
     <string-array name="grade_array">
         <item>1.0</item>
