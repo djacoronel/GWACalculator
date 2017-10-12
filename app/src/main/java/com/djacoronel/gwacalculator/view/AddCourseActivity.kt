@@ -11,10 +11,12 @@ import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.djacoronel.gwacalculator.R
+import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.activity_add_course.*
 import kotlinx.android.synthetic.main.grade_selection_layout.*
 import kotlinx.android.synthetic.main.units_selection_layout.*
 import org.jetbrains.anko.toast
+
 
 class AddCourseActivity : AppCompatActivity() {
 
@@ -26,32 +28,49 @@ class AddCourseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_course)
+        add_course_button.setOnClickListener { saveInputsAndReturn() }
 
+        addViewsToList()
+        setupTextViewBindings()
+        setDefaultSelected()
+        setupAds()
+        addAllCapsFilterInInput()
+        setAddCourseOnEnter()
+        showKeyBoard()
+    }
+
+    private fun addViewsToList() {
         unitViews = listOf(units_1, units_2, units_3, units_4, units_5)
         gradeViews = listOf(grade_1, grade_1_25, grade_1_5, grade_1_75, grade_2,
                 grade_2_25, grade_1_5, grade_1_75, grade_3, grade_5)
+    }
 
-        setupTextViewBindings()
-        add_course_button.setOnClickListener { saveInputsAndReturn() }
-
-        //Set default selected values
+    private fun setDefaultSelected() {
         setSelectedUnits(units_1)
         setSelectedGrade(grade_1)
+    }
 
-        //Forces all cap in input
+    private fun setupAds() {
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+    }
+
+    private fun addAllCapsFilterInInput() {
         val filters = course_code_input.filters.toMutableList()
         filters.add(InputFilter.AllCaps())
         course_code_input.filters = filters.toTypedArray()
+    }
 
-        //Add course on enter key pressed
+    private fun setAddCourseOnEnter() {
         course_code_input.setOnKeyListener({ _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
                 saveInputsAndReturn()
             }
             false
         })
+    }
 
-        //Shows keyboard on activity start
+    private fun showKeyBoard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
@@ -106,5 +125,21 @@ class AddCourseActivity : AppCompatActivity() {
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED, Intent())
         finish()
+    }
+
+    public override fun onPause() {
+        super.onPause()
+        adView.pause()
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        adView.resume()
+
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        adView.destroy()
     }
 }

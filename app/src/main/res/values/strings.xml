@@ -54,4 +54,7 @@
         <item>3.0</item>
         <item>5.0</item>
     </string-array>
+
+    <string name="GWA_banner_ad">ca-app-pub-7143288157158114/6698835293</string>
+    <string name="test_ad">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

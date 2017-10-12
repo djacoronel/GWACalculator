@@ -21,6 +21,7 @@ import com.djacoronel.gwacalculator.model.CourseRepository
 import com.djacoronel.gwacalculator.presenter.GWACalcPresenter
 import com.djacoronel.gwacalculator.utility.Contract
 import com.djacoronel.gwacalculator.utility.MyUsteGradesFetcherTask
+import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.grade_selection_layout.view.*
 import kotlinx.android.synthetic.main.gwa_layout.*
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         fab.setOnClickListener { showAddPrompt() }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setupViewPager()
+        setupAds()
     }
 
     override fun addCourse(course: Course) {
@@ -264,5 +266,26 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 MyUsteGradesFetcherTask(mPresenter, this).execute(studNo, password)
             }
         }
+    }
+
+    private fun setupAds() {
+        val adRequest = AdRequest.Builder().build()
+        main_adView.loadAd(adRequest)
+    }
+
+    public override fun onPause() {
+        super.onPause()
+        main_adView.pause()
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        main_adView.resume()
+
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        main_adView.destroy()
     }
 }
