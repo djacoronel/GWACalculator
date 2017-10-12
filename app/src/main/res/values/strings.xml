@@ -55,6 +55,8 @@
         <item>5.0</item>
     </string-array>
 
-    <string name="GWA_banner_ad">ca-app-pub-7143288157158114/6698835293</string>
     <string name="test_ad">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="gwa_ad_main">ca-app-pub-7143288157158114/3918551299</string>
+    <string name="gwa_ad_login">ca-app-pub-7143288157158114/1188446177</string>
+    <string name="gwa_ad_add_course">ca-app-pub-7143288157158114/9053837210</string>
 </resources>

@@ -269,7 +269,9 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     private fun setupAds() {
-        val adRequest = AdRequest.Builder().build()
+        val adRequest = AdRequest.Builder()
+                .addTestDevice("CEA54CA528FB019B75536189748EAF7E")
+                .build()
         main_adView.loadAd(adRequest)
     }
 
