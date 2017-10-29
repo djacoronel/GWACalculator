@@ -26,6 +26,8 @@ class MyUsteGradesFetcherTask(
         mProgressDialog.setMessage("Loading...")
         mProgressDialog.isIndeterminate = false
         mProgressDialog.show()
+
+
     }
 
     override fun doInBackground(vararg params: String): ArrayList<Course> {
