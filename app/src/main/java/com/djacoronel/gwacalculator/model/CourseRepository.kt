@@ -1,7 +1,7 @@
 package com.djacoronel.gwacalculator.model
 
 import android.content.Context
-import com.djacoronel.gwacalculator.utility.Contract
+import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.utility.DbHelper
 import org.jetbrains.anko.db.*
 

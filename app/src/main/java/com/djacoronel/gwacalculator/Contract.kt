@@ -1,4 +1,4 @@
-package com.djacoronel.gwacalculator.utility
+package com.djacoronel.gwacalculator
 
 import com.djacoronel.gwacalculator.model.Course
 
@@ -10,9 +10,6 @@ class Contract {
         fun showAddPrompt()
         fun showDeleteCoursePrompt(course: Course)
         fun showDeleteSemesterPrompt(semester: String)
-        fun showAddSemester()
-        fun showAddCourse()
-        fun setupViewPager()
         fun addSemesterRecycler(semester: String)
         fun removeSemesterRecycler(semester: String)
         fun addCourse(course: Course)
@@ -22,12 +19,9 @@ class Contract {
     interface Actions {
         fun computeGWA()
         fun computeSEM()
-        fun getCourse(courseCode: String): Course
         fun addCourse(course: Course)
         fun removeCourse(course: Course)
         fun updateCourse(course: Course)
-        fun onAddCourseClick(course: Course)
-        fun onChangeGrade(course: Course)
         fun getCourses(semester: String): MutableList<Course>
         fun getSemesters(): MutableList<String>
         fun addSemester(semester: String): Boolean

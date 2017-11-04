@@ -3,6 +3,7 @@ package com.djacoronel.gwacalculator.utility
 import android.app.Activity
 import android.app.ProgressDialog
 import android.os.AsyncTask
+import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
 import org.jetbrains.anko.toast
 import org.jsoup.Connection

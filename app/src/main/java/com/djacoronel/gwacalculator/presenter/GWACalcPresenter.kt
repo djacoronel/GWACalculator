@@ -1,7 +1,7 @@
 package com.djacoronel.gwacalculator.presenter
 
+import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
-import com.djacoronel.gwacalculator.utility.Contract
 import com.djacoronel.gwacalculator.view.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -39,14 +39,6 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         view.updateSEM(sem)
     }
 
-    override fun onChangeGrade(course: Course) {
-        updateCourse(course)
-    }
-
-    override fun onAddCourseClick(course: Course) {
-        view.showAddCourse()
-    }
-
     override fun getCourses(semester: String): MutableList<Course> {
         return repo.getCourses(semester)
     }
@@ -63,10 +55,6 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         view.removeCourse(course)
         computeGWA()
         computeSEM()
-    }
-
-    override fun getCourse(courseCode: String): Course {
-        return repo.getCourse(courseCode)
     }
 
     override fun updateCourse(course: Course) {
