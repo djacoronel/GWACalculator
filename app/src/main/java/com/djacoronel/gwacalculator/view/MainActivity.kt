@@ -61,14 +61,16 @@ class MainActivity : AppCompatActivity(), Contract.View {
         val semesters = mPresenter.getSemesters()
 
         if (semesters.isNotEmpty())
-            mPresenter.computeSEM()
+            mPresenter.computeSEM(semesters[0])
+
         for (semester in semesters)
             adapter.addRecycler(setupRecycler(semester), semester)
 
         viewpager.adapter = adapter
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
-                mPresenter.computeSEM()
+                val semesters = mPresenter.getSemesters()
+                mPresenter.computeSEM(semesters[position])
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
@@ -125,7 +127,6 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 showLogin()
             else if (i == addChoices.indexOf(addSemesterLabel))
                 showAddSemester()
-
             else if (i == addChoices.indexOf(addCourseLabel))
                 if (mPresenter.getSemesters().isNotEmpty())
                     showAddCourse()
@@ -184,7 +185,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 val semester = viewpager.adapter.getPageTitle(viewpager.currentItem) as String
 
                 mPresenter.addCourse(Course(0, courseCode, units, grade, semester))
-                mPresenter.computeSEM()
+                mPresenter.computeSEM(semester)
             }
         } else if (requestCode == 2) {
             if (resultCode == Activity.RESULT_OK) {
@@ -234,6 +235,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
     override fun removeSemesterRecycler(semester: String) {
         (viewpager.adapter as ViewPagerAdapter).removeRecycler(viewpager, semester)
         setupTabLongClicks()
+
+        viewpager.setCurrentItem(tabs.tabCount, true)
     }
 
     override fun showDeleteCoursePrompt(course: Course) {

@@ -18,7 +18,7 @@ class Contract {
 
     interface Actions {
         fun computeGWA()
-        fun computeSEM()
+        fun computeSEM(semester: String)
         fun addCourse(course: Course)
         fun removeCourse(course: Course)
         fun updateCourse(course: Course)

@@ -2,8 +2,6 @@ package com.djacoronel.gwacalculator.presenter
 
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
-import com.djacoronel.gwacalculator.view.MainActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repository) : Contract.Actions {
@@ -21,19 +19,16 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         view.updateGWA(gwa)
     }
 
-    override fun computeSEM() {
-        val position = (view as MainActivity).viewpager.currentItem
-        val semesters = repo.getSemesters()
+    override fun computeSEM(semester: String) {
         var sem = 0.0
 
-        if (semesters.isNotEmpty()) {
-            val courses = repo.getCourses(semesters[position]).filter { it.grade != 0.0 }
 
-            if (courses.isNotEmpty()) {
-                val sum = courses.sumByDouble { it.grade * it.units }
-                val totalUnits = courses.sumBy { it.units }
-                sem = sum / totalUnits
-            }
+        val courses = repo.getCourses(semester).filter { it.grade != 0.0 }
+
+        if (courses.isNotEmpty()) {
+            val sum = courses.sumByDouble { it.grade * it.units }
+            val totalUnits = courses.sumBy { it.units }
+            sem = sum / totalUnits
         }
 
         view.updateSEM(sem)
@@ -47,20 +42,20 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         repo.addCourse(course)
         view.addCourse(course)
         computeGWA()
-        computeSEM()
+        computeSEM(course.semester)
     }
 
     override fun removeCourse(course: Course) {
         repo.removeCourse(course)
         view.removeCourse(course)
         computeGWA()
-        computeSEM()
+        computeSEM(course.semester)
     }
 
     override fun updateCourse(course: Course) {
         repo.updateCourse(course)
         computeGWA()
-        computeSEM()
+        computeSEM(course.semester)
     }
 
     override fun getSemesters(): MutableList<String> {
@@ -83,6 +78,5 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         repo.removeSemester(semester)
         view.removeSemesterRecycler(semester)
         computeGWA()
-        computeSEM()
     }
 }
