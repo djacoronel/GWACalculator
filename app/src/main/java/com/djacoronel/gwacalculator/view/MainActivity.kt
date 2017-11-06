@@ -45,12 +45,13 @@ class MainActivity : AppCompatActivity(), Contract.View {
         mPresenter = GWACalcPresenter(this, CourseRepository(this))
         mPresenter.loadData()
 
-        setupAds()
         fab.setOnClickListener { showAddPrompt() }
+        setupAds()
     }
 
     override fun showGrades(grades: Map<String, List<Course>>) {
         setupViewPager()
+
         for (semester in grades.keys) {
             val adapter = RecyclerAdapter()
             grades[semester]?.let { adapter.addNewCourses(it) }
@@ -59,6 +60,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
             recycler.adapter = adapter
             viewPagerAdapter.addRecycler(recycler, semester)
         }
+
+        setupTabLongClicks()
     }
 
     private fun setupViewPager() {
@@ -73,7 +76,6 @@ class MainActivity : AppCompatActivity(), Contract.View {
         })
 
         tabs.setupWithViewPager(viewpager)
-        setupTabLongClicks()
     }
 
     private fun onPageSelected(position: Int) {

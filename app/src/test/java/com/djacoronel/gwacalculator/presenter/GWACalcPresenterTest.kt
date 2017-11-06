@@ -23,21 +23,21 @@ class GWACalcPresenterTest {
 
     private fun <T> uninitialized(): T = null as T
 
-    @Mock
+    @Mock private
     lateinit var mockView: Contract.View
 
-    @Mock
+    @Mock private
     lateinit var mockRepository: Contract.Repository
 
-    lateinit var presenter: GWACalcPresenter
+    private lateinit var presenter: GWACalcPresenter
 
-    val semesters = mutableListOf("sem1", "sem2", "sem3")
-    val courses = listOf(
+    private val semesters = mutableListOf("sem1", "sem2", "sem3")
+    private val courses = listOf(
             Course(0, "course1", 1, 1.0, "sem1"),
             Course(0, "course2", 1, 1.0, "sem2"),
             Course(0, "course3", 1, 1.0, "sem3")
     )
-    val data = mapOf(
+    private val data = linkedMapOf(
             Pair(semesters[0], listOf(courses[0])),
             Pair(semesters[1], listOf(courses[1])),
             Pair(semesters[2], listOf(courses[2]))
@@ -57,9 +57,18 @@ class GWACalcPresenterTest {
 
         presenter.loadData()
         verify(mockRepository).getSemesters()
-        semesters.forEach { verify(mockRepository).getCourses(it) }
         verify(mockView).showGrades(data)
         verify(mockView).updateGWA(ArgumentMatchers.anyDouble())
+        verify(mockView).updateSEM(ArgumentMatchers.anyDouble())
+    }
+
+    @Test
+    fun updateGwaGradeInView() {
+        `when`(mockRepository.getAllCourse()).thenReturn(courses)
+
+        presenter.computeGWA()
+        verify(mockRepository).getAllCourse()
+        verify(mockView).updateGWA(1.0)
     }
 
     @Test

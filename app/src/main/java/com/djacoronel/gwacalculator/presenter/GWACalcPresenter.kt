@@ -13,7 +13,11 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         semesters.forEach { grades.put(it, repo.getCourses(it)) }
 
         view.showGrades(grades)
-        computeGWA()
+
+        if (semesters.isNotEmpty()) {
+            computeGWA()
+            computeSEM(semesters[0])
+        }
     }
 
     override fun computeGWA() {
@@ -30,10 +34,8 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
     }
 
     override fun computeSEM(semester: String) {
-        var sem = 0.0
-
-
         val courses = repo.getCourses(semester).filter { it.grade != 0.0 }
+        var sem = 0.0
 
         if (courses.isNotEmpty()) {
             val sum = courses.sumByDouble { it.grade * it.units }
