@@ -6,6 +6,16 @@ import com.djacoronel.gwacalculator.model.Course
 
 class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repository) : Contract.Actions {
 
+    override fun loadData() {
+        val semesters = repo.getSemesters()
+        val grades = linkedMapOf<String, List<Course>>()
+
+        semesters.forEach { grades.put(it, repo.getCourses(it)) }
+
+        view.showGrades(grades)
+        computeGWA()
+    }
+
     override fun computeGWA() {
         val courses = repo.getAllCourse().filter { it.grade != 0.0 }
         var gwa = 0.0
@@ -34,7 +44,7 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         view.updateSEM(sem)
     }
 
-    override fun getCourses(semester: String): MutableList<Course> {
+    override fun getCourses(semester: String): List<Course> {
         return repo.getCourses(semester)
     }
 
@@ -58,19 +68,16 @@ class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repos
         computeSEM(course.semester)
     }
 
-    override fun getSemesters(): MutableList<String> {
+    override fun getSemesters(): List<String> {
         return repo.getSemesters()
     }
 
-    override fun addSemester(semester: String): Boolean {
+    override fun addSemester(semester: String) {
         val semesters = getSemesters()
 
-        return if (semester in semesters)
-            false
-        else {
+        if (semester !in semesters) {
             repo.addSemester(semester)
             view.addSemesterRecycler(semester)
-            true
         }
     }
 

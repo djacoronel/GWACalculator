@@ -33,7 +33,8 @@ import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), Contract.View {
 
-    lateinit var mPresenter: Contract.Actions
+    private lateinit var mPresenter: Contract.Actions
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,51 +43,48 @@ class MainActivity : AppCompatActivity(), Contract.View {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         mPresenter = GWACalcPresenter(this, CourseRepository(this))
-        mPresenter.computeGWA()
+        mPresenter.loadData()
 
         setupAds()
-        setupViewPager()
         fab.setOnClickListener { showAddPrompt() }
     }
 
-    private fun setupAds() {
-        val adRequest = AdRequest.Builder()
-                .addTestDevice("CEA54CA528FB019B75536189748EAF7E")
-                .build()
-        main_adView.loadAd(adRequest)
+    override fun showGrades(grades: Map<String, List<Course>>) {
+        setupViewPager()
+        for (semester in grades.keys) {
+            val adapter = RecyclerAdapter()
+            grades[semester]?.let { adapter.addNewCourses(it) }
+
+            val recycler = createRecycler()
+            recycler.adapter = adapter
+            viewPagerAdapter.addRecycler(recycler, semester)
+        }
     }
 
     private fun setupViewPager() {
-        val adapter = ViewPagerAdapter()
-        val semesters = mPresenter.getSemesters()
-
-        if (semesters.isNotEmpty())
-            mPresenter.computeSEM(semesters[0])
-
-        for (semester in semesters)
-            adapter.addRecycler(setupRecycler(semester), semester)
-
-        viewpager.adapter = adapter
+        viewPagerAdapter = ViewPagerAdapter()
+        viewpager.adapter = viewPagerAdapter
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageSelected(position: Int) {
-                val semesters = mPresenter.getSemesters()
-                mPresenter.computeSEM(semesters[position])
-            }
-
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageScrollStateChanged(state: Int) {}
+            override fun onPageSelected(position: Int) {
+                this@MainActivity.onPageSelected(position)
+            }
         })
 
         tabs.setupWithViewPager(viewpager)
         setupTabLongClicks()
     }
 
-    private fun setupRecycler(semester: String): RecyclerView {
-        val courses = mPresenter.getCourses(semester)
+    private fun onPageSelected(position: Int) {
+        val sem = viewpager.adapter.getPageTitle(position) as String
+        mPresenter.computeSEM(sem)
+    }
 
+    private fun createRecycler(): RecyclerView {
         val semRecycler = RecyclerView(this)
         semRecycler.layoutManager = LinearLayoutManager(this)
-        semRecycler.adapter = RecyclerAdapter(courses)
+        semRecycler.adapter = RecyclerAdapter()
 
         val mDividerItemDecoration = DividerItemDecoration(
                 semRecycler.context,
@@ -108,9 +106,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
         val tabStrip = tabs.getChildAt(0) as LinearLayout
         for (i in 0 until tabStrip.childCount) {
             tabStrip.getChildAt(i).setOnLongClickListener {
-                showDeleteSemesterPrompt(
-                        viewpager.adapter.getPageTitle(i) as String
-                )
+                val semester = viewpager.adapter.getPageTitle(i) as String
+                showDeleteSemesterPrompt(semester)
                 false
             }
         }
@@ -165,9 +162,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 if (semester == "") {
                     toast(getString(R.string.blank_sem_label_warning))
                     showAddSemester()
-                } else if (!mPresenter.addSemester(semester)) {
-                    toast(getString(R.string.add_semester_label_warning))
-                    showAddSemester()
+                } else {
+                    mPresenter.addSemester(semester)
                 }
             }
             negativeButton(getString(R.string.cancel_button_label)) {
@@ -206,9 +202,9 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     override fun addCourse(course: Course) {
-        val recyclerAdapter = ((viewpager.adapter as ViewPagerAdapter)
+        val recyclerAdapter = viewPagerAdapter
                 .getRecycler(tabs.selectedTabPosition)
-                .adapter as RecyclerAdapter)
+                .adapter as RecyclerAdapter
 
         val courses = recyclerAdapter.courses
         courses.add(course)
@@ -216,9 +212,9 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     override fun removeCourse(course: Course) {
-        val recyclerAdapter = ((viewpager.adapter as ViewPagerAdapter)
+        val recyclerAdapter = viewPagerAdapter
                 .getRecycler(tabs.selectedTabPosition)
-                .adapter as RecyclerAdapter)
+                .adapter as RecyclerAdapter
 
         val courses = recyclerAdapter.courses
         recyclerAdapter.notifyItemRemoved(courses.indexOf(course))
@@ -226,14 +222,14 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     override fun addSemesterRecycler(semester: String) {
-        (viewpager.adapter as ViewPagerAdapter).addRecycler(setupRecycler(semester), semester)
+        viewPagerAdapter.addRecycler(createRecycler(), semester)
         setupTabLongClicks()
 
         viewpager.setCurrentItem(tabs.tabCount, true)
     }
 
     override fun removeSemesterRecycler(semester: String) {
-        (viewpager.adapter as ViewPagerAdapter).removeRecycler(viewpager, semester)
+        viewPagerAdapter.removeRecycler(viewpager, semester)
         setupTabLongClicks()
 
         viewpager.setCurrentItem(tabs.tabCount, true)
@@ -277,6 +273,13 @@ class MainActivity : AppCompatActivity(), Contract.View {
         mPresenter.updateCourse(course)
     }
 
+    private fun setupAds() {
+        val adRequest = AdRequest.Builder()
+                .addTestDevice("CEA54CA528FB019B75536189748EAF7E")
+                .build()
+        main_adView.loadAd(adRequest)
+    }
+
     public override fun onPause() {
         super.onPause()
         main_adView.pause()
@@ -285,7 +288,6 @@ class MainActivity : AppCompatActivity(), Contract.View {
     public override fun onResume() {
         super.onResume()
         main_adView.resume()
-
     }
 
     public override fun onDestroy() {

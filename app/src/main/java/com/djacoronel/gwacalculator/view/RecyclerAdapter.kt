@@ -9,8 +9,8 @@ import com.djacoronel.gwacalculator.model.Course
 import kotlinx.android.synthetic.main.row_layout.view.*
 
 
-class RecyclerAdapter(val courses: MutableList<Course>) :
-        RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+    val courses = mutableListOf<Course>()
 
     //extension function to simplify view inflation in an adapter
     private fun ViewGroup.inflate(layoutRes: Int): View {
@@ -43,5 +43,18 @@ class RecyclerAdapter(val courses: MutableList<Course>) :
                 (context as MainActivity).showChangeGradePrompt(course, gradesEdit)
             }
         }
+    }
+
+    fun addNewCourses(newCourses: List<Course>) {
+        courses.clear()
+        courses.addAll(newCourses)
+    }
+
+    fun addCourse(course: Course) {
+        courses.add(course)
+    }
+
+    fun removeCourse(course: Course) {
+        courses.remove(course)
     }
 }

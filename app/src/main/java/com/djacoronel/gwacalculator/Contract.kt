@@ -5,6 +5,7 @@ import com.djacoronel.gwacalculator.model.Course
 class Contract {
 
     interface View {
+        fun showGrades(grades: Map<String, List<Course>>)
         fun updateGWA(gwa: Double)
         fun updateSEM(sem: Double)
         fun showAddPrompt()
@@ -17,25 +18,26 @@ class Contract {
     }
 
     interface Actions {
+        fun loadData()
         fun computeGWA()
         fun computeSEM(semester: String)
         fun addCourse(course: Course)
         fun removeCourse(course: Course)
         fun updateCourse(course: Course)
-        fun getCourses(semester: String): MutableList<Course>
-        fun getSemesters(): MutableList<String>
-        fun addSemester(semester: String): Boolean
+        fun getCourses(semester: String): List<Course>
+        fun getSemesters(): List<String>
+        fun addSemester(semester: String)
         fun removeSemester(semester: String)
     }
 
     interface Repository {
         fun getCourse(courseCode: String): Course
-        fun getAllCourse(): MutableList<Course>
+        fun getAllCourse(): List<Course>
         fun addCourse(course: Course): Boolean
         fun removeCourse(course: Course)
         fun updateCourse(course: Course)
-        fun getCourses(semester: String): MutableList<Course>
-        fun getSemesters(): MutableList<String>
+        fun getCourses(semester: String): List<Course>
+        fun getSemesters(): List<String>
         fun addSemester(semester: String)
         fun removeSemester(semester: String)
     }
