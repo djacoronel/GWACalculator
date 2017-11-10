@@ -6,7 +6,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
@@ -15,14 +14,6 @@ import org.mockito.MockitoAnnotations
  * Created by djacoronel on 11/6/17.
  */
 class GWACalcPresenterTest {
-
-    private fun <T> any(): T {
-        Mockito.any<T>()
-        return uninitialized()
-    }
-
-    private fun <T> uninitialized(): T = null as T
-
     @Mock private
     lateinit var mockView: Contract.View
 
@@ -81,5 +72,4 @@ class GWACalcPresenterTest {
         verify(mockRepository).getCourses(testSemester)
         verify(mockView).updateSEM(1.0)
     }
-
 }
