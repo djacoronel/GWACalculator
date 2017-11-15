@@ -4,7 +4,14 @@ import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
 
 
-class GWACalcPresenter(val view: Contract.View, private val repo: Contract.Repository) : Contract.Actions {
+class GWACalcPresenter : Contract.Actions {
+    lateinit var view: Contract.View
+    lateinit var repo: Contract.Repository
+
+    override fun setViewAndRepo(view: Contract.View, repo: Contract.Repository) {
+        this.view = view
+        this.repo = repo
+    }
 
     override fun loadData() {
         val semesters = repo.getSemesters()

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -18,8 +17,6 @@ import android.widget.TextView
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.R
 import com.djacoronel.gwacalculator.model.Course
-import com.djacoronel.gwacalculator.model.CourseRepository
-import com.djacoronel.gwacalculator.presenter.GWACalcPresenter
 import com.djacoronel.gwacalculator.utility.MyUsteGradesFetcherTask
 import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,20 +26,24 @@ import kotlinx.android.synthetic.main.input_semester_layout.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.selector
 import org.jetbrains.anko.toast
+import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), Contract.View {
+class MainActivity : BaseActivity(), Contract.View {
 
-    private lateinit var mPresenter: Contract.Actions
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
+    @Inject lateinit var mPresenter: Contract.Actions
+    @Inject lateinit var repository: Contract.Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        mPresenter = GWACalcPresenter(this, CourseRepository(this))
+        androidComponent.inject(this)
+
+        mPresenter.setViewAndRepo(this, repository)
         mPresenter.loadData()
 
         fab.setOnClickListener { showAddPrompt() }
