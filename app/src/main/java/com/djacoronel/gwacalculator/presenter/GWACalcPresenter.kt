@@ -2,15 +2,16 @@ package com.djacoronel.gwacalculator.presenter
 
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class GWACalcPresenter : Contract.Actions {
+@Singleton
+class GWACalcPresenter @Inject constructor(repo: Contract.Repository) : Contract.Actions {
     lateinit var view: Contract.View
-    lateinit var repo: Contract.Repository
+    val repo = repo
 
-    override fun setViewAndRepo(view: Contract.View, repo: Contract.Repository) {
+    override fun setViewAndRepo(view: Contract.View) {
         this.view = view
-        this.repo = repo
     }
 
     override fun loadData() {

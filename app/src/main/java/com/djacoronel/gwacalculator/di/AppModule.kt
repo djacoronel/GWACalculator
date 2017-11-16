@@ -19,9 +19,9 @@ class AppModule(val app: App) {
 
     @Provides
     @Singleton
-    fun provideRepo(): Contract.Repository = CourseRepository(app)
+    fun provideRepo(): Contract.Repository = CourseRepository(provideApp())
 
     @Provides
     @Singleton
-    fun provideView(): Contract.Actions = GWACalcPresenter()
+    fun provideView(): Contract.Actions = GWACalcPresenter(provideRepo())
 }

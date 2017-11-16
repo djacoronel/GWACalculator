@@ -4,8 +4,11 @@ import android.content.Context
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.utility.DbHelper
 import org.jetbrains.anko.db.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CourseRepository(mContext: Context) : Contract.Repository {
+@Singleton
+class CourseRepository @Inject constructor(mContext: Context) : Contract.Repository {
     private val database = DbHelper.getInstance(mContext)
 
     override fun getCourse(courseCode: String): Course {

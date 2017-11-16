@@ -34,7 +34,6 @@ class MainActivity : BaseActivity(), Contract.View {
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     @Inject lateinit var mPresenter: Contract.Actions
-    @Inject lateinit var repository: Contract.Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,7 @@ class MainActivity : BaseActivity(), Contract.View {
 
         androidComponent.inject(this)
 
-        mPresenter.setViewAndRepo(this, repository)
+        mPresenter.setViewAndRepo(this)
         mPresenter.loadData()
 
         fab.setOnClickListener { showAddPrompt() }

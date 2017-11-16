@@ -18,7 +18,7 @@ class Contract {
     }
 
     interface Actions {
-        fun setViewAndRepo(view: Contract.View, repo: Contract.Repository)
+        fun setViewAndRepo(view: Contract.View)
         fun loadData()
         fun computeGWA()
         fun computeSEM(semester: String)
