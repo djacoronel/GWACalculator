@@ -1,24 +1,32 @@
 package com.djacoronel.gwacalculator
 
+import android.app.Activity
 import android.app.Application
-import com.djacoronel.gwacalculator.di.AppComponent
-import com.djacoronel.gwacalculator.di.AppModule
 import com.djacoronel.gwacalculator.di.DaggerAppComponent
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import javax.inject.Inject
+
 
 /**
  * Created by djacoronel on 11/15/17.
  */
-class App : Application() {
+class App : Application(), HasActivityInjector {
 
-    val component: AppComponent by lazy {
-        DaggerAppComponent
-                .builder()
-                .appModule(AppModule(this))
-                .build()
-    }
+    @Inject
+    lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
     override fun onCreate() {
         super.onCreate()
-        component.inject(this)
+        DaggerAppComponent
+                .builder()
+                .application(this)
+                .build()
+                .inject(this)
+
+    }
+
+    override fun activityInjector(): DispatchingAndroidInjector<Activity>? {
+        return activityDispatchingAndroidInjector
     }
 }

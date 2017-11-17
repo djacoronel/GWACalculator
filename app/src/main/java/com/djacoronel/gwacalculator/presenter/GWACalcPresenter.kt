@@ -6,13 +6,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GWACalcPresenter @Inject constructor(repo: Contract.Repository) : Contract.Actions {
-    lateinit var view: Contract.View
-    val repo = repo
-
-    override fun setViewAndRepo(view: Contract.View) {
-        this.view = view
-    }
+class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Contract.Repository) : Contract.Actions {
 
     override fun loadData() {
         val semesters = repo.getSemesters()

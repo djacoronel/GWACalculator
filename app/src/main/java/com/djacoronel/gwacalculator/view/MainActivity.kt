@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,6 +20,7 @@ import com.djacoronel.gwacalculator.R
 import com.djacoronel.gwacalculator.model.Course
 import com.djacoronel.gwacalculator.utility.MyUsteGradesFetcherTask
 import com.google.android.gms.ads.AdRequest
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.grade_selection_layout.view.*
 import kotlinx.android.synthetic.main.gwa_layout.*
@@ -29,7 +31,7 @@ import org.jetbrains.anko.toast
 import javax.inject.Inject
 
 
-class MainActivity : BaseActivity(), Contract.View {
+class MainActivity : AppCompatActivity(), Contract.View {
 
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
@@ -38,11 +40,9 @@ class MainActivity : BaseActivity(), Contract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        AndroidInjection.inject(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        androidComponent.inject(this)
-
-        mPresenter.setViewAndRepo(this)
         mPresenter.loadData()
 
         fab.setOnClickListener { showAddPrompt() }

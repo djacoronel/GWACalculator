@@ -3,19 +3,11 @@ package com.djacoronel.gwacalculator.utility
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import org.jetbrains.anko.db.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DbHelper(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "gwaDB") {
-    companion object {
-        private var instance: DbHelper? = null
-
-        @Synchronized
-        fun getInstance(ctx: Context): DbHelper {
-            if (instance == null) {
-                instance = DbHelper(ctx.applicationContext)
-            }
-            return instance!!
-        }
-    }
+@Singleton
+class DbHelper @Inject constructor(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "gwaDB") {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable("Course", true,
