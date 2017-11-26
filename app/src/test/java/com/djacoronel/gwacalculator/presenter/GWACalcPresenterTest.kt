@@ -6,8 +6,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 /**
@@ -71,5 +70,30 @@ class GWACalcPresenterTest {
         presenter.computeSEM(testSemester)
         verify(mockRepository).getCourses(testSemester)
         verify(mockView).updateSEM(1.0)
+    }
+
+    @Test
+    fun addCourseTest() {
+        val testCourse = courses[0]
+
+        presenter.addCourse(testCourse)
+        verify(mockRepository).addCourse(testCourse)
+        verify(mockView).addCourse(testCourse)
+    }
+
+    @Test
+    fun addSemesterTest() {
+        `when`(mockRepository.getSemesters()).thenReturn(semesters)
+
+        val existingSemester = semesters[0]
+        val newSemester = "sem4"
+
+        presenter.addSemester(existingSemester)
+        verify(mockRepository, never()).addSemester(existingSemester)
+        verify(mockView, never()).addSemesterRecycler(existingSemester)
+
+        presenter.addSemester(newSemester)
+        verify(mockRepository).addSemester(newSemester)
+        verify(mockView).addSemesterRecycler(newSemester)
     }
 }
