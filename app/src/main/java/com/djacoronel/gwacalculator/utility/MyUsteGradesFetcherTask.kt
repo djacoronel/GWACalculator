@@ -126,7 +126,7 @@ class MyUsteGradesFetcherTask(
         units += row.select("td")[3].text().toInt()
 
         var grade = 0.0
-        val gradeText = row.select("td")[5].text()
+        val gradeText = row.select("td").last().text()
 
         if (gradeText.trim().isNotEmpty())
             grade = gradeText.toDouble()
