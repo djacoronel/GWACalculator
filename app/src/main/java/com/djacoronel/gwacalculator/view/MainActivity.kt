@@ -262,7 +262,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         val alert = alert { customView = view }.show()
 
         val gradeViews = listOf(view.grade_1, view.grade_1_25, view.grade_1_5, view.grade_1_75, view.grade_2,
-                view.grade_2_25, view.grade_1_5, view.grade_1_75, view.grade_3, view.grade_5)
+                view.grade_2_25, view.grade_2_5, view.grade_2_75, view.grade_3, view.grade_5)
 
         for (gradeView in gradeViews) {
             gradeView.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, gradeView.text) }
