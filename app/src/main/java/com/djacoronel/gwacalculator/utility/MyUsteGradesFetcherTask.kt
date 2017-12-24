@@ -126,16 +126,12 @@ class MyUsteGradesFetcherTask(
         var grade = 0.0
         val gradeText = row.select("td").last().text()
 
-
-        val double = Pattern.compile("\\d")
-
-        if (double.matcher(gradeText).find()) {
-            grade = if (gradeText.trim().contains("/")) {
-                val gradeTextSplit = gradeText.split("/")
-                gradeTextSplit[1].toDouble()
-            } else {
-                gradeText.toDouble()
-            }
+        // used regular expression to find and extract double values in grades
+        // because some grades are encoded with letters which makes the app crash
+        val pattern = Pattern.compile("-?\\d+(\\.\\d+)?")
+        val matcher = pattern.matcher(gradeText)
+        if (matcher.find()) {
+            grade = matcher.group().toDouble()
         }
 
         return Course(0, courseCode, units, grade, semName)
