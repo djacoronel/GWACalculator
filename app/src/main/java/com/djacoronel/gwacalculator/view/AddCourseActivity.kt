@@ -22,7 +22,7 @@ class AddCourseActivity : AppCompatActivity() {
 
     private lateinit var gradeViews: List<TextView>
     private lateinit var unitViews: List<TextView>
-    private var selectedUnits = 0
+    private var selectedUnits = 0.0
     private var selectedGrade = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +89,7 @@ class AddCourseActivity : AppCompatActivity() {
 
     private fun setSelectedUnits(selected: TextView) {
         selected.setBackgroundResource(R.drawable.circle_highlight)
-        selectedUnits = selected.text.toString().toInt()
+        selectedUnits = selected.text.toString().toDouble()
 
         unitViews
                 .filter { it != selected }
