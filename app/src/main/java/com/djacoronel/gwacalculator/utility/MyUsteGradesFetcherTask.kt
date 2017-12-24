@@ -16,19 +16,16 @@ import java.lang.ref.WeakReference
 class MyUsteGradesFetcherTask(
         private val mPresenter: Contract.Actions, activity: Activity) : AsyncTask<String, Void, ArrayList<Course>>() {
 
-    private lateinit var mProgressDialog: ProgressDialog
+    private var progressDialog = ProgressDialog(activity)
     private var weakActivity = WeakReference<Activity>(activity)
     private val userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36"
 
     override fun onPreExecute() {
         super.onPreExecute()
-        mProgressDialog = ProgressDialog(weakActivity.get())
-        mProgressDialog.setTitle("Fetching grades from MyUste")
-        mProgressDialog.setMessage("Loading...")
-        mProgressDialog.isIndeterminate = false
-        mProgressDialog.show()
-
-
+        progressDialog.setTitle("Fetching grades from MyUste")
+        progressDialog.setMessage("Loading...")
+        progressDialog.isIndeterminate = false
+        progressDialog.show()
     }
 
     override fun doInBackground(vararg params: String): ArrayList<Course> {
@@ -156,6 +153,14 @@ class MyUsteGradesFetcherTask(
                 mPresenter.addCourse(course)
             }
         }
-        mProgressDialog.dismiss()
+
+        weakActivity.get()?.let {
+            if (it.isFinishing) {
+                return
+            }
+            if (progressDialog.isShowing) {
+                progressDialog.dismiss()
+            }
+        }
     }
 }
