@@ -11,7 +11,7 @@ class CourseRepository @Inject constructor() : Contract.Repository {
     @Inject lateinit var database: DbHelper
 
     override fun getCourse(courseCode: String): Course {
-        var course = Course(0, "CC", 0, 0.0, "1st Semester")
+        var course = Course(0, "CC", 0.0, 0.0, "1st Semester")
         database.use {
             select("Course")
                     .whereArgs("(courseCode = {courseCode})",

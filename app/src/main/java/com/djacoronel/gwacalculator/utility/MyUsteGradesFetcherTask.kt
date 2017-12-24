@@ -11,6 +11,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import java.lang.ref.WeakReference
+import java.util.regex.Pattern
 
 
 class MyUsteGradesFetcherTask(
@@ -119,14 +120,16 @@ class MyUsteGradesFetcherTask(
     private fun createCourse(row: Element, semName: String): Course {
         val courseCode = row.select("td")[0].text()
         val courseName = row.select("td")[1].text()
-        var units = row.select("td")[2].text().toInt()
-        units += row.select("td")[3].text().toInt()
+        var units = row.select("td")[2].text().toDouble()
+        units += row.select("td")[3].text().toDouble()
 
         var grade = 0.0
         val gradeText = row.select("td").last().text()
 
 
-        if (gradeText.trim().isNotEmpty()) {
+        val double = Pattern.compile("\\d")
+
+        if (double.matcher(gradeText).find()) {
             grade = if (gradeText.trim().contains("/")) {
                 val gradeTextSplit = gradeText.split("/")
                 gradeTextSplit[1].toDouble()
@@ -134,7 +137,6 @@ class MyUsteGradesFetcherTask(
                 gradeText.toDouble()
             }
         }
-
 
         return Course(0, courseCode, units, grade, semName)
     }

@@ -28,7 +28,7 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
 
         if (courses.isNotEmpty()) {
             val sum = courses.sumByDouble { it.grade * it.units }
-            val totalUnits = courses.sumBy { it.units }
+            val totalUnits = courses.sumByDouble { it.units }
             gwa = sum / totalUnits
         }
 
@@ -41,7 +41,7 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
 
         if (courses.isNotEmpty()) {
             val sum = courses.sumByDouble { it.grade * it.units }
-            val totalUnits = courses.sumBy { it.units }
+            val totalUnits = courses.sumByDouble { it.units }
             sem = sum / totalUnits
         }
 

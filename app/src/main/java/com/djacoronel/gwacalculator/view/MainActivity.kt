@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 val courseCode = data.getStringExtra("courseCodeInput")
-                val units = data.getIntExtra("unitsInput", 0)
+                val units = data.getDoubleExtra("unitsInput", 0.0)
                 val grade = data.getDoubleExtra("gradeInput", 0.0)
                 val semester = viewpager.adapter.getPageTitle(viewpager.currentItem) as String
 

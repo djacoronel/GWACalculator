@@ -13,7 +13,7 @@ class DbHelper @Inject constructor(mContext: Context) : ManagedSQLiteOpenHelper(
         db.createTable("Course", true,
                 "id" to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
                 "courseCode" to TEXT,
-                "units" to INTEGER,
+                "units" to REAL,
                 "grade" to REAL,
                 "semester" to TEXT)
         db.createTable("Semester", true,

@@ -30,7 +30,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             courseCodeText.text = course.courseCode
 
             val units = course.units
-            val unitLabel = "$units ${if (units == 1) "unit" else "units"}"
+            val unitLabel = "$units ${if (units == 1.0) "unit" else "units"}"
             unitsText.text = unitLabel
 
             setOnLongClickListener {
