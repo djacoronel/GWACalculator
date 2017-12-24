@@ -128,8 +128,16 @@ class MyUsteGradesFetcherTask(
         var grade = 0.0
         val gradeText = row.select("td").last().text()
 
-        if (gradeText.trim().isNotEmpty())
-            grade = gradeText.toDouble()
+
+        if (gradeText.trim().isNotEmpty()) {
+            grade = if (gradeText.trim().contains("/")) {
+                val gradeTextSplit = gradeText.split("/")
+                gradeTextSplit[1].toDouble()
+            } else {
+                gradeText.toDouble()
+            }
+        }
+
 
         return Course(0, courseCode, units, grade, semName)
     }

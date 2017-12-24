@@ -42,7 +42,7 @@ class AddCourseActivity : AppCompatActivity() {
     private fun addViewsToList() {
         unitViews = listOf(units_1, units_2, units_3, units_4, units_5)
         gradeViews = listOf(grade_1, grade_1_25, grade_1_5, grade_1_75, grade_2,
-                grade_2_25, grade_1_5, grade_1_75, grade_3, grade_5)
+                grade_2_25, grade_2_5, grade_2_75, grade_3, grade_5)
     }
 
     private fun setDefaultSelected() {
