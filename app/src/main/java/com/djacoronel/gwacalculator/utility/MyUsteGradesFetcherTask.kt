@@ -15,7 +15,7 @@ import java.util.regex.Pattern
 
 
 class MyUsteGradesFetcherTask(
-        private val mPresenter: Contract.Actions, activity: Activity) : AsyncTask<String, Void, ArrayList<Course>>() {
+        private val mView: Contract.View, activity: Activity) : AsyncTask<String, Void, ArrayList<Course>>() {
 
     private var progressDialog = ProgressDialog(activity)
     private var weakActivity = WeakReference<Activity>(activity)
@@ -139,17 +139,9 @@ class MyUsteGradesFetcherTask(
 
     override fun onPostExecute(courses: ArrayList<Course>) {
         if (courses.isEmpty())
-            weakActivity.get()?.toast("Failed to fetch grades")
+            weakActivity.get()?.toast("Failed to fetch grades. Check your internet connection.")
         else {
-            val storedSems = mPresenter.getSemesters()
-            for (sem in storedSems)
-                mPresenter.removeSemester(sem)
-
-            for (course in courses) {
-                if (!mPresenter.getSemesters().contains(course.semester))
-                    mPresenter.addSemester(course.semester)
-                mPresenter.addCourse(course)
-            }
+            mView.showOverwritePrompt(courses)
         }
 
         weakActivity.get()?.let {

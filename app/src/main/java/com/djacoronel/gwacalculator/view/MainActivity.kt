@@ -32,6 +32,24 @@ import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(), Contract.View {
+    override fun showOverwritePrompt(courses: List<Course>) {
+        val storedSems = mPresenter.getSemesters()
+        if (storedSems.isEmpty()) {
+            mPresenter.replaceData(courses)
+        } else {
+            alert {
+                title = "Update or replace old data?"
+                positiveButton("Update") {
+                    mPresenter.updateData(courses)
+                    toast("Data updated!")
+                }
+                negativeButton("Replace") {
+                    mPresenter.replaceData(courses)
+                    toast("Data replaced!")
+                }
+            }.show()
+        }
+    }
 
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
@@ -190,7 +208,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 val studNo = data.getStringExtra("studNo")
                 val password = data.getStringExtra("password")
 
-                MyUsteGradesFetcherTask(mPresenter, this).execute(studNo, password)
+                MyUsteGradesFetcherTask(this, this).execute(studNo, password)
             }
         }
     }
@@ -210,7 +228,21 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
         val courses = recyclerAdapter.courses
         courses.add(course)
-        recyclerAdapter.notifyItemInserted(courses.indexOf(course))
+        recyclerAdapter.notifyItemInserted(courses.lastIndex)
+    }
+
+    override fun updateCourse(course: Course) {
+        val recyclerAdapter = viewPagerAdapter
+                .getRecycler(tabs.selectedTabPosition)
+                .adapter as RecyclerAdapter
+
+        val courses = recyclerAdapter.courses
+        val courseToUpdate = courses.find { it.id == course.id }
+        val courseIndex = courses.indexOf(courseToUpdate)
+        courseToUpdate?.let {
+            it.grade = course.grade
+            recyclerAdapter.notifyItemChanged(courseIndex)
+        }
     }
 
     override fun removeCourse(course: Course) {
@@ -219,8 +251,9 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 .adapter as RecyclerAdapter
 
         val courses = recyclerAdapter.courses
-        recyclerAdapter.notifyItemRemoved(courses.indexOf(course))
+        val courseIndex = courses.indexOf(course)
         courses.remove(course)
+        recyclerAdapter.notifyItemRemoved(courseIndex)
     }
 
     override fun addSemesterRecycler(semester: String) {
@@ -265,13 +298,12 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 view.grade_2_25, view.grade_2_5, view.grade_2_75, view.grade_3, view.grade_5)
 
         for (gradeView in gradeViews) {
-            gradeView.setOnClickListener { alert.dismiss(); setGrade(course, gradeText, gradeView.text) }
+            gradeView.setOnClickListener { alert.dismiss(); setGrade(course, gradeView.text) }
         }
     }
 
-    private fun setGrade(course: Course, gradeText: TextView, newGrade: CharSequence) {
+    private fun setGrade(course: Course, newGrade: CharSequence) {
         course.grade = newGrade.toString().toDouble()
-        gradeText.text = newGrade
         mPresenter.updateCourse(course)
     }
 

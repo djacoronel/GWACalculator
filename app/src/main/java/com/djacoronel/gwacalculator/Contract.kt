@@ -8,17 +8,21 @@ class Contract {
         fun showGrades(grades: Map<String, List<Course>>)
         fun updateGWA(gwa: Double)
         fun updateSEM(sem: Double)
+        fun showOverwritePrompt(courses: List<Course>)
         fun showAddPrompt()
         fun showDeleteCoursePrompt(course: Course)
         fun showDeleteSemesterPrompt(semester: String)
         fun addSemesterRecycler(semester: String)
         fun removeSemesterRecycler(semester: String)
         fun addCourse(course: Course)
+        fun updateCourse(course: Course)
         fun removeCourse(course: Course)
     }
 
     interface Actions {
         fun loadData()
+        fun updateData(courses: List<Course>)
+        fun replaceData(courses: List<Course>)
         fun computeGWA()
         fun computeSEM(semester: String)
         fun addCourse(course: Course)

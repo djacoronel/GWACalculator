@@ -22,6 +22,37 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         }
     }
 
+    override fun updateData(courses: List<Course>) {
+        val storedSems = repo.getSemesters()
+        val storedCourses = repo.getAllCourse()
+
+        for (course in courses) {
+            val courseToUpdate = storedCourses.find {
+                it.courseCode == course.courseCode && it.semester == course.semester
+            }
+
+            if (courseToUpdate == null) {
+                addCourse(course)
+            } else {
+                courseToUpdate.grade = course.grade
+                updateCourse(courseToUpdate)
+            }
+        }
+    }
+
+    override fun replaceData(courses: List<Course>) {
+        val storedSems = repo.getSemesters()
+
+        for (sem in storedSems)
+            removeSemester(sem)
+
+        for (course in courses) {
+            if (!getSemesters().contains(course.semester))
+                addSemester(course.semester)
+            addCourse(course)
+        }
+    }
+
     override fun computeGWA() {
         val courses = repo.getAllCourse().filter { it.grade != 0.0 }
         var gwa = 0.0
@@ -68,6 +99,7 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
 
     override fun updateCourse(course: Course) {
         repo.updateCourse(course)
+        view.updateCourse(course)
         computeGWA()
         computeSEM(course.semester)
     }
