@@ -40,7 +40,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
             gradesEdit.text = course.grade.toString()
             gradesEdit.setOnClickListener {
-                (context as MainActivity).showChangeGradePrompt(course, gradesEdit)
+                (context as MainActivity).showChangeGradePrompt(course)
             }
         }
     }
@@ -52,9 +52,21 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     fun addCourse(course: Course) {
         courses.add(course)
+        notifyItemInserted(courses.lastIndex)
+    }
+
+    fun updateCourse(course: Course) {
+        val courseToUpdate = courses.find { it.id == course.id }
+        val courseIndex = courses.indexOf(courseToUpdate)
+        courseToUpdate?.let {
+            it.grade = course.grade
+            notifyItemChanged(courseIndex)
+        }
     }
 
     fun removeCourse(course: Course) {
+        val courseIndex = courses.indexOf(course)
         courses.remove(course)
+        notifyItemRemoved(courseIndex)
     }
 }

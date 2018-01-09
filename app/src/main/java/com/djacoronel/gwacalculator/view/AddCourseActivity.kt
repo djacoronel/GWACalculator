@@ -53,6 +53,7 @@ class AddCourseActivity : AppCompatActivity() {
     private fun setupAds() {
         val adRequest = AdRequest.Builder()
                 .addTestDevice("CEA54CA528FB019B75536189748EAF7E")
+                .addTestDevice("4CCC112819318A806ADC4807B6A0C444")
                 .build()
         adView.loadAd(adRequest)
     }

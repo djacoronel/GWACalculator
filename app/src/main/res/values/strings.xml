@@ -59,4 +59,5 @@
     <string name="gwa_ad_main">ca-app-pub-7143288157158114/3918551299</string>
     <string name="gwa_ad_login">ca-app-pub-7143288157158114/1188446177</string>
     <string name="gwa_ad_add_course">ca-app-pub-7143288157158114/9053837210</string>
+    <string name="label_remember_me">Remember me</string>
 </resources>

@@ -39,8 +39,8 @@ class ViewPagerAdapter : PagerAdapter() {
         return position
     }
 
-    fun getRecycler(position: Int): RecyclerView {
-        return mRecyclerList[position]
+    fun getRecyclerAdapter(position: Int): RecyclerAdapter {
+        return mRecyclerList[position].adapter as RecyclerAdapter
     }
 
     override fun getCount(): Int {

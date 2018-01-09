@@ -14,7 +14,6 @@ import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.R
 import com.djacoronel.gwacalculator.model.Course
@@ -32,25 +31,6 @@ import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(), Contract.View {
-    override fun showOverwritePrompt(courses: List<Course>) {
-        val storedSems = mPresenter.getSemesters()
-        if (storedSems.isEmpty()) {
-            mPresenter.replaceData(courses)
-        } else {
-            alert {
-                title = "Update or replace old data?"
-                positiveButton("Update") {
-                    mPresenter.updateData(courses)
-                    toast("Data updated!")
-                }
-                negativeButton("Replace") {
-                    mPresenter.replaceData(courses)
-                    toast("Data replaced!")
-                }
-            }.show()
-        }
-    }
-
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     @Inject lateinit var mPresenter: Contract.Actions
@@ -213,6 +193,25 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }
     }
 
+    override fun showOverwritePrompt(courses: List<Course>) {
+        val storedSems = mPresenter.getSemesters()
+        if (storedSems.isEmpty()) {
+            mPresenter.replaceData(courses)
+        } else {
+            alert {
+                title = "Update or replace old data?"
+                positiveButton("Update") {
+                    mPresenter.updateData(courses)
+                    toast("Data updated!")
+                }
+                negativeButton("Replace") {
+                    mPresenter.replaceData(courses)
+                    toast("Data replaced!")
+                }
+            }.show()
+        }
+    }
+
     override fun updateGWA(gwa: Double) {
         gwaValue.text = getString(R.string.gwa_format).format(gwa)
     }
@@ -223,37 +222,23 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
     override fun addCourse(course: Course) {
         val recyclerAdapter = viewPagerAdapter
-                .getRecycler(tabs.selectedTabPosition)
-                .adapter as RecyclerAdapter
+                .getRecyclerAdapter(tabs.selectedTabPosition)
 
-        val courses = recyclerAdapter.courses
-        courses.add(course)
-        recyclerAdapter.notifyItemInserted(courses.lastIndex)
+        recyclerAdapter.addCourse(course)
     }
 
     override fun updateCourse(course: Course) {
         val recyclerAdapter = viewPagerAdapter
-                .getRecycler(tabs.selectedTabPosition)
-                .adapter as RecyclerAdapter
+                .getRecyclerAdapter(tabs.selectedTabPosition)
 
-        val courses = recyclerAdapter.courses
-        val courseToUpdate = courses.find { it.id == course.id }
-        val courseIndex = courses.indexOf(courseToUpdate)
-        courseToUpdate?.let {
-            it.grade = course.grade
-            recyclerAdapter.notifyItemChanged(courseIndex)
-        }
+        recyclerAdapter.updateCourse(course)
     }
 
     override fun removeCourse(course: Course) {
         val recyclerAdapter = viewPagerAdapter
-                .getRecycler(tabs.selectedTabPosition)
-                .adapter as RecyclerAdapter
+                .getRecyclerAdapter(tabs.selectedTabPosition)
 
-        val courses = recyclerAdapter.courses
-        val courseIndex = courses.indexOf(course)
-        courses.remove(course)
-        recyclerAdapter.notifyItemRemoved(courseIndex)
+        recyclerAdapter.removeCourse(course)
     }
 
     override fun addSemesterRecycler(semester: String) {
@@ -290,7 +275,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }.show()
     }
 
-    fun showChangeGradePrompt(course: Course, gradeText: TextView) {
+    fun showChangeGradePrompt(course: Course) {
         val view = View.inflate(this, R.layout.grade_selection_layout, null)
         val alert = alert { customView = view }.show()
 
@@ -310,6 +295,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
     private fun setupAds() {
         val adRequest = AdRequest.Builder()
                 .addTestDevice("CEA54CA528FB019B75536189748EAF7E")
+                .addTestDevice("4CCC112819318A806ADC4807B6A0C444")
                 .build()
         main_adView.loadAd(adRequest)
     }
