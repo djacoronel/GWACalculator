@@ -23,7 +23,6 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
     }
 
     override fun updateData(courses: List<Course>) {
-        val storedSems = repo.getSemesters()
         val storedCourses = repo.getAllCourse()
 
         for (course in courses) {
