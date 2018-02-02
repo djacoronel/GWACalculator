@@ -145,7 +145,7 @@ class MyUsteGradesFetcherTask(
         }
 
         weakActivity.get()?.let {
-            if (it.isFinishing) {
+            if (it.isFinishing || it.isDestroyed) {
                 return
             }
             if (progressDialog.isShowing) {
