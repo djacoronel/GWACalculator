@@ -89,6 +89,9 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         view.addCourse(course)
         computeGWA()
         computeSEM(course.semester)
+
+        view.setMessageVisibility()
+
     }
 
     override fun removeCourse(course: Course) {
@@ -96,6 +99,8 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         view.removeCourse(course)
         computeGWA()
         computeSEM(course.semester)
+
+        view.setMessageVisibility()
     }
 
     override fun updateCourse(course: Course) {

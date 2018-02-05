@@ -1,65 +1,67 @@
 <resources>
-    <string name="app_name">GWA Calculator</string>
-    <string name="gwa_label">GWA</string>
-    <string name="gwa_value">0.000</string>
-    <string name="course_code_label">Course Code</string>
-    <string name="units_label">Units</string>
-    <string name="grade_label">Grade</string>
-    <string name="gwa_format">%.3f</string>
-    <string name="add_course_label">Add Course</string>
-    <string name="units_value_1">1</string>
-    <string name="units_value_2">2</string>
-    <string name="units_value_3">3</string>
-    <string name="units_value_4">4</string>
-    <string name="units_value_5">5</string>
-    <string name="semester_label_hint">Semester Label</string>
-    <string name="grade_value_1_0">1.0</string>
-    <string name="grade_value_1_25">1.25</string>
-    <string name="grade_value_1_5">1.5</string>
-    <string name="grade_value_1_75">1.75</string>
-    <string name="grade_value_2_0">2.0</string>
-    <string name="grade_value_2_25">2.25</string>
-    <string name="grade_value_2_5">2.5</string>
-    <string name="grade_value_2_75">2.75</string>
-    <string name="grade_value_3_0">3.0</string>
-    <string name="grade_value_5_0">5.0</string>
-    <string name="sem_label">SEM</string>
-    <string name="sem_value">0.000</string>
-    <string name="add_semester_label">Add Semester</string>
-    <string name="add_prompt_title">Which do you want to add?</string>
-    <string name="add_semester_warning">Add a semester first!</string>
-    <string name="add_semester_label_warning">Semester label already used</string>
-    <string name="add_button_label">Add</string>
-    <string name="cancel_button_label">Cancel</string>
-    <string name="delete_course_title">Delete Course?</string>
-    <string name="delete_button_label">Delete</string>
-    <string name="delete_semester_title">Delete Semester?</string>
-    <string name="blank_sem_label_warning">Semester label is required</string>
-    <string name="row_grade_text">1.0</string>
-    <string name="grade_selection_indicator">Grade selection indicator</string>
-    <string name="student_number_hint">Student Number</string>
-    <string name="password_hint">Password</string>
-    <string name="fetch_grades_button_label">Fetch Grades</string>
-    <string name="fetch_grades_description">Login to MyUste to fetch grades</string>
+  <string name="app_name">GWA Calculator</string>
+  <string name="gwa_label">GWA</string>
+  <string name="gwa_value">0.000</string>
+  <string name="course_code_label">Course Code</string>
+  <string name="units_label">Units</string>
+  <string name="grade_label">Grade</string>
+  <string name="gwa_format">%.3f</string>
+  <string name="add_course_label">Add Course</string>
+  <string name="units_value_1">1</string>
+  <string name="units_value_2">2</string>
+  <string name="units_value_3">3</string>
+  <string name="units_value_4">4</string>
+  <string name="units_value_5">5</string>
+  <string name="semester_label_hint">Semester Label</string>
+  <string name="grade_value_1_0">1.0</string>
+  <string name="grade_value_1_25">1.25</string>
+  <string name="grade_value_1_5">1.5</string>
+  <string name="grade_value_1_75">1.75</string>
+  <string name="grade_value_2_0">2.0</string>
+  <string name="grade_value_2_25">2.25</string>
+  <string name="grade_value_2_5">2.5</string>
+  <string name="grade_value_2_75">2.75</string>
+  <string name="grade_value_3_0">3.0</string>
+  <string name="grade_value_5_0">5.0</string>
+  <string name="sem_label">SEM</string>
+  <string name="sem_value">0.000</string>
+  <string name="add_semester_label">Add Semester</string>
+  <string name="add_prompt_title">Which do you want to add?</string>
+  <string name="add_semester_warning">Add a semester first!</string>
+  <string name="add_semester_label_warning">Semester label already used</string>
+  <string name="add_button_label">Add</string>
+  <string name="cancel_button_label">Cancel</string>
+  <string name="delete_course_title">Delete Course?</string>
+  <string name="delete_button_label">Delete</string>
+  <string name="delete_semester_title">Delete Semester?</string>
+  <string name="blank_sem_label_warning">Semester label is required</string>
+  <string name="row_grade_text">1.0</string>
+  <string name="grade_selection_indicator">Grade selection indicator</string>
+  <string name="student_number_hint">Student Number</string>
+  <string name="password_hint">Password</string>
+  <string name="fetch_grades_button_label">Fetch Grades</string>
+  <string name="fetch_grades_description">Login to MyUste to fetch grades</string>
 
-    <string-array name="grade_array">
-        <item>1.0</item>
-        <item>1.25</item>
-        <item>1.5</item>
-        <item>1.75</item>
-        <item>2.0</item>
-        <item>2.25</item>
-        <item>2.5</item>
-        <item>2.75</item>
-        <item>3.0</item>
-        <item>5.0</item>
-    </string-array>
+  <string-array name="grade_array">
+    <item>1.0</item>
+    <item>1.25</item>
+    <item>1.5</item>
+    <item>1.75</item>
+    <item>2.0</item>
+    <item>2.25</item>
+    <item>2.5</item>
+    <item>2.75</item>
+    <item>3.0</item>
+    <item>5.0</item>
+  </string-array>
 
-    <string name="test_ad">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="gwa_ad_main">ca-app-pub-7143288157158114/3918551299</string>
-    <string name="gwa_ad_login">ca-app-pub-7143288157158114/1188446177</string>
-    <string name="gwa_ad_add_course">ca-app-pub-7143288157158114/9053837210</string>
-    <string name="label_remember_me">Remember me</string>
-  <string name="empty_tabs_message">Success comes through sustained effort</string>
-  <string name="start_message">Start by touching the add button!</string>
+  <string name="test_ad">ca-app-pub-3940256099942544/6300978111</string>
+  <string name="gwa_ad_main">ca-app-pub-7143288157158114/3918551299</string>
+  <string name="gwa_ad_login">ca-app-pub-7143288157158114/1188446177</string>
+  <string name="gwa_ad_add_course">ca-app-pub-7143288157158114/9053837210</string>
+  <string name="label_remember_me">Remember me</string>
+  <string name="empty_tabs_message">\"Success comes through sustained effort.\"</string>
+  <string name="start_message">Start by touching the add button to add a semester!</string>
+  <string name="no_course_message">Add a course for this semester!</string>
+  <string name="tiger_description">Tiger</string>
 </resources>

@@ -74,7 +74,8 @@
     android:src="@drawable/tiger"
     ads:layout_constraintBottom_toBottomOf="parent"
     ads:layout_constraintEnd_toEndOf="parent"
-    ads:layout_constraintStart_toStartOf="parent"/>
+    ads:layout_constraintStart_toStartOf="parent"
+    android:contentDescription="@string/tiger_description"/>
 
   <com.google.android.gms.ads.AdView
     android:id="@+id/login_adView"

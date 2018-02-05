@@ -31,12 +31,16 @@ class ViewPagerAdapter : PagerAdapter() {
     }
 
     private fun removeRecycler(pager: ViewPager, position: Int): Int {
+        val nextPosition = if (position == mRecyclerList.lastIndex) position - 1 else position
+
         pager.adapter = null
         mRecyclerList.removeAt(position)
         mRecyclerTitleList.removeAt(position)
         pager.adapter = this
+
+        pager.setCurrentItem(nextPosition, true)
         notifyDataSetChanged()
-        return position
+        return nextPosition
     }
 
     fun getRecyclerAdapter(position: Int): RecyclerAdapter {

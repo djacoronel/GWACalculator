@@ -47,16 +47,27 @@
   <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <TextView
-      android:id="@+id/tiger"
+      android:id="@+id/tiger_no_sems"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:drawableTop="@drawable/tiger"
       android:layout_gravity="center"
       android:drawablePadding="16dp"
       android:text="@string/start_message"/>
+
+    <TextView
+      android:id="@+id/tiger_no_course"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:drawableTop="@drawable/tiger"
+      android:layout_gravity="center"
+      android:drawablePadding="16dp"
+      android:visibility="invisible"
+      android:text="@string/no_course_message"/>
 
     <android.support.v4.view.ViewPager
       android:id="@+id/viewpager"

@@ -50,10 +50,18 @@ class MainActivity : AppCompatActivity(), Contract.View {
     override fun setMessageVisibility() {
         if (mPresenter.getSemesters().isEmpty()) {
             message.visibility = View.VISIBLE
-            tiger.visibility = View.VISIBLE
+            tiger_no_sems.visibility = View.VISIBLE
+            tiger_no_course.visibility = View.INVISIBLE
         } else {
             message.visibility = View.INVISIBLE
-            tiger.visibility = View.INVISIBLE
+            tiger_no_sems.visibility = View.INVISIBLE
+
+            val sem = viewpager.adapter.getPageTitle(viewpager.currentItem) as String
+
+            if (mPresenter.getCourses(sem).isEmpty())
+                tiger_no_course.visibility = View.VISIBLE
+            else
+                tiger_no_course.visibility = View.INVISIBLE
         }
     }
 
@@ -87,8 +95,13 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     private fun onPageSelected(position: Int) {
-        val sem = viewpager.adapter.getPageTitle(position) as String
-        mPresenter.computeSEM(sem)
+        if (position == -1)
+            mPresenter.computeSEM("empty")
+        else {
+            val sem = viewpager.adapter.getPageTitle(position) as String
+            mPresenter.computeSEM(sem)
+        }
+        setMessageVisibility()
     }
 
     private fun createRecycler(): RecyclerView {
@@ -255,14 +268,14 @@ class MainActivity : AppCompatActivity(), Contract.View {
         viewPagerAdapter.addRecycler(createRecycler(), semester)
         setupTabLongClicks()
 
-        viewpager.setCurrentItem(tabs.tabCount, true)
+        viewpager.setCurrentItem(viewPagerAdapter.count, true)
     }
 
     override fun removeSemesterRecycler(semester: String) {
-        viewPagerAdapter.removeRecycler(viewpager, semester)
+        val nextPosition = viewPagerAdapter.removeRecycler(viewpager, semester)
         setupTabLongClicks()
 
-        viewpager.setCurrentItem(tabs.tabCount, true)
+        onPageSelected(nextPosition)
     }
 
     override fun showDeleteCoursePrompt(course: Course) {
