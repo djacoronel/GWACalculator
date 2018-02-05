@@ -1,53 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.djacoronel.gwacalculator.view.MainActivity">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context="com.djacoronel.gwacalculator.view.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <include
+      android:id="@+id/include"
+      layout="@layout/gwa_layout"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        app:tabGravity="fill"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/colorPrimaryText"
+        app:tabTextColor="@color/colorPrimaryText"/>
 
-        <include
-            layout="@layout/gwa_layout"
-            android:id="@+id/include"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabTextColor="@color/colorPrimaryText"
-            app:tabSelectedTextColor="@color/colorPrimaryText"
-            app:tabMode="scrollable"
-            app:tabGravity="fill" />
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+      <TextView
+        android:id="@+id/message"
+        android:textStyle="italic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:gravity="center"
+        android:text="@string/empty_tabs_message"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"/>
+    </FrameLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-      android:src="@drawable/ic_add"/>
+  </android.support.design.widget.AppBarLayout>
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/main_adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:adSize="BANNER"
-        app:adUnitId="@string/gwa_ad_main"
-        android:layout_gravity="bottom|center_horizontal" />
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TextView
+      android:id="@+id/tiger"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:drawableTop="@drawable/tiger"
+      android:layout_gravity="center"
+      android:drawablePadding="16dp"
+      android:text="@string/start_message"/>
+
+    <android.support.v4.view.ViewPager
+      android:id="@+id/viewpager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+  </FrameLayout>
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_margin"
+    android:layout_gravity="bottom|end"
+    android:src="@drawable/ic_add"/>
+
+  <com.google.android.gms.ads.AdView
+    android:id="@+id/main_adView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center_horizontal"
+    app:adSize="BANNER"
+    app:adUnitId="@string/gwa_ad_main"/>
 
 </android.support.design.widget.CoordinatorLayout>

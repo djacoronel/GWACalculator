@@ -66,6 +66,16 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:src="@drawable/tiger"
+    ads:layout_constraintBottom_toBottomOf="parent"
+    ads:layout_constraintEnd_toEndOf="parent"
+    ads:layout_constraintStart_toStartOf="parent"/>
+
   <com.google.android.gms.ads.AdView
     android:id="@+id/login_adView"
     android:layout_width="wrap_content"

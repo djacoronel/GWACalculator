@@ -47,6 +47,16 @@ class MainActivity : AppCompatActivity(), Contract.View {
         setupAds()
     }
 
+    override fun setMessageVisibility() {
+        if (mPresenter.getSemesters().isEmpty()) {
+            message.visibility = View.VISIBLE
+            tiger.visibility = View.VISIBLE
+        } else {
+            message.visibility = View.INVISIBLE
+            tiger.visibility = View.INVISIBLE
+        }
+    }
+
     override fun showGrades(grades: Map<String, List<Course>>) {
         setupViewPager()
 

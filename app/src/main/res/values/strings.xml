@@ -60,4 +60,6 @@
     <string name="gwa_ad_login">ca-app-pub-7143288157158114/1188446177</string>
     <string name="gwa_ad_add_course">ca-app-pub-7143288157158114/9053837210</string>
     <string name="label_remember_me">Remember me</string>
+  <string name="empty_tabs_message">Success comes through sustained effort</string>
+  <string name="start_message">Start by touching the add button!</string>
 </resources>

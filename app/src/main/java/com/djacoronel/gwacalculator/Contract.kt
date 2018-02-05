@@ -17,6 +17,7 @@ class Contract {
         fun addCourse(course: Course)
         fun updateCourse(course: Course)
         fun removeCourse(course: Course)
+        fun setMessageVisibility()
     }
 
     interface Actions {
