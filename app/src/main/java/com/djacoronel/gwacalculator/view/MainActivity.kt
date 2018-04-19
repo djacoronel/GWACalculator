@@ -34,7 +34,8 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), Contract.View {
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
-    @Inject lateinit var mPresenter: Contract.Actions
+    @Inject
+    lateinit var mPresenter: Contract.Actions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -187,7 +188,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
                     toast(getString(R.string.blank_sem_label_warning))
                     showAddSemester()
                 } else {
-                    mPresenter.addSemester(Semester(0, semester))
+                    if (mPresenter.getSemesters().find { it.title == semester } == null)
+                        mPresenter.addSemester(Semester(0, semester))
+                    else
+                        toast(getString(R.string.add_semester_label_warning))
                 }
             }
             negativeButton(getString(R.string.cancel_button_label)) {
