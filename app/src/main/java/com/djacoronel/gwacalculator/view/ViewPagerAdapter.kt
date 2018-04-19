@@ -5,28 +5,29 @@ import android.support.v4.view.ViewPager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.djacoronel.gwacalculator.model.Semester
 
 
 class ViewPagerAdapter : PagerAdapter() {
     private val mRecyclerList = mutableListOf<RecyclerView>()
-    private val mRecyclerTitleList = mutableListOf<String>()
+    private val mRecyclerTitleList = mutableListOf<Semester>()
 
     override fun isViewFromObject(view: View?, `object`: Any?): Boolean {
         return view === `object`
     }
 
-    fun addRecycler(recyclerView: RecyclerView, semester: String): Int {
+    fun addRecycler(recyclerView: RecyclerView, semester: Semester): Int {
         return addRecycler(recyclerView, semester, mRecyclerList.size)
     }
 
-    private fun addRecycler(recyclerView: RecyclerView, semester: String, position: Int): Int {
+    private fun addRecycler(recyclerView: RecyclerView, semester: Semester, position: Int): Int {
         mRecyclerTitleList.add(semester)
         mRecyclerList.add(position, recyclerView)
         notifyDataSetChanged()
         return position
     }
 
-    fun removeRecycler(pager: ViewPager, semester: String): Int {
+    fun removeRecycler(pager: ViewPager, semester: Semester): Int {
         return removeRecycler(pager, mRecyclerTitleList.indexOf(semester))
     }
 
@@ -47,12 +48,16 @@ class ViewPagerAdapter : PagerAdapter() {
         return mRecyclerList[position].adapter as RecyclerAdapter
     }
 
+    fun getPageSemester(position: Int): Semester {
+        return mRecyclerTitleList[position]
+    }
+
     override fun getCount(): Int {
         return mRecyclerList.size
     }
 
     override fun getPageTitle(position: Int): CharSequence {
-        return mRecyclerTitleList[position]
+        return mRecyclerTitleList[position].title
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {

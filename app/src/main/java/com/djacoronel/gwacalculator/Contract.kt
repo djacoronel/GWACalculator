@@ -1,19 +1,20 @@
 package com.djacoronel.gwacalculator
 
 import com.djacoronel.gwacalculator.model.Course
+import com.djacoronel.gwacalculator.model.Semester
 
 class Contract {
 
     interface View {
-        fun showGrades(grades: Map<String, List<Course>>)
+        fun showGrades(grades: Map<Semester, List<Course>>)
         fun updateGWA(gwa: Double)
         fun updateSEM(sem: Double)
-        fun showOverwritePrompt(courses: List<Course>)
+        fun showOverwritePrompt(grades: LinkedHashMap<String, ArrayList<Course>>)
         fun showAddPrompt()
         fun showDeleteCoursePrompt(course: Course)
-        fun showDeleteSemesterPrompt(semester: String)
-        fun addSemesterRecycler(semester: String)
-        fun removeSemesterRecycler(semester: String)
+        fun showDeleteSemesterPrompt(semester: Semester)
+        fun addSemesterRecycler(semester: Semester)
+        fun removeSemesterRecycler(semester: Semester)
         fun addCourse(course: Course)
         fun updateCourse(course: Course)
         fun removeCourse(course: Course)
@@ -22,17 +23,17 @@ class Contract {
 
     interface Actions {
         fun loadData()
-        fun updateData(courses: List<Course>)
-        fun replaceData(courses: List<Course>)
+        fun updateData(grades: LinkedHashMap<String, ArrayList<Course>>)
+        fun replaceData(grades: LinkedHashMap<String, ArrayList<Course>>)
         fun computeGWA()
-        fun computeSEM(semester: String)
+        fun computeSEM(semesterId: Int)
         fun addCourse(course: Course)
         fun removeCourse(course: Course)
         fun updateCourse(course: Course)
-        fun getCourses(semester: String): List<Course>
-        fun getSemesters(): List<String>
-        fun addSemester(semester: String)
-        fun removeSemester(semester: String)
+        fun getCourses(semester: Semester): List<Course>
+        fun getSemesters(): List<Semester>
+        fun addSemester(semester: Semester)
+        fun removeSemester(semester: Semester)
     }
 
     interface Repository {
@@ -41,9 +42,10 @@ class Contract {
         fun addCourse(course: Course): Boolean
         fun removeCourse(course: Course)
         fun updateCourse(course: Course)
-        fun getCourses(semester: String): List<Course>
-        fun getSemesters(): List<String>
-        fun addSemester(semester: String)
-        fun removeSemester(semester: String)
+        fun getCourses(semesterId: Int): List<Course>
+        fun getSemester(semTitle: String): Semester
+        fun getSemesters(): List<Semester>
+        fun addSemester(semester: Semester)
+        fun removeSemester(semester: Semester)
     }
 }

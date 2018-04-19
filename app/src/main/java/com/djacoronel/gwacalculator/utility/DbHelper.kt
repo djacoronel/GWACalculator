@@ -15,9 +15,10 @@ class DbHelper @Inject constructor(mContext: Context) : ManagedSQLiteOpenHelper(
                 "courseCode" to TEXT,
                 "units" to REAL,
                 "grade" to REAL,
-                "semester" to TEXT)
+                "semester" to INTEGER)
         db.createTable("Semester", true,
-                "semester" to TEXT + PRIMARY_KEY)
+                "id" to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                "semester" to TEXT)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

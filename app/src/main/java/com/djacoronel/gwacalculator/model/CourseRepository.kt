@@ -11,7 +11,7 @@ class CourseRepository @Inject constructor() : Contract.Repository {
     @Inject lateinit var database: DbHelper
 
     override fun getCourse(courseCode: String): Course {
-        var course = Course(0, "CC", 0.0, 0.0, "1st Semester")
+        var course = Course(0, "CC", 0.0, 0.0, 0)
         database.use {
             select("Course")
                     .whereArgs("(courseCode = {courseCode})",
@@ -37,7 +37,7 @@ class CourseRepository @Inject constructor() : Contract.Repository {
                         "courseCode" to course.courseCode,
                         "units" to course.units,
                         "grade" to course.grade,
-                        "semester" to course.semester)
+                        "semester" to course.semesterId)
                 course.id = id.toInt()
             }
             return true
@@ -60,40 +60,52 @@ class CourseRepository @Inject constructor() : Contract.Repository {
         }
     }
 
-    override fun removeSemester(semester: String) {
+    override fun removeSemester(semester: Semester) {
         database.use {
             delete("Course",
-                    "(semester = {semester})",
-                    "semester" to semester)
+                    "(semester = {semesterId})",
+                    "semesterId" to semester.id)
             delete("Semester",
-                    "(semester = {semester})",
-                    "semester" to semester)
+                    "(id = {semesterId})",
+                    "semesterId" to semester.id)
         }
     }
 
-    override fun addSemester(semester: String) {
+    override fun addSemester(semester: Semester) {
         database.use {
             insert("Semester",
-                    "semester" to semester)
+                    "semester" to semester.title)
         }
     }
 
-    override fun getSemesters(): MutableList<String> {
-        var semesters = mutableListOf<String>()
+    override fun getSemesters(): MutableList<Semester> {
+        var semesters = mutableListOf<Semester>()
         database.use {
-            semesters = select("Semester").parseList(classParser<String>()).toMutableList()
+            semesters = select("Semester").parseList(classParser<Semester>()).toMutableList()
         }
         return semesters
     }
 
-    override fun getCourses(semester: String): MutableList<Course> {
+    override fun getCourses(semesterId: Int): MutableList<Course> {
         var courses = mutableListOf<Course>()
         database.use {
             courses = select("Course")
-                    .whereArgs("(semester = {semester})",
-                            "semester" to semester)
+                    .whereArgs("(semester = {semesterId})",
+                            "semesterId" to semesterId)
                     .parseList(classParser<Course>()).toMutableList()
         }
         return courses
+    }
+
+    override fun getSemester(semTitle: String): Semester {
+        var semester = Semester(0, "semester")
+        database.use {
+            select("Semester")
+                    .whereArgs("(semester = {semester})",
+                            "semester" to semTitle)
+                    .parseOpt(classParser<Semester>())
+                    ?.let { semester = it }
+        }
+        return semester
     }
 }

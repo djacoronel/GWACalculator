@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.R
 import com.djacoronel.gwacalculator.model.Course
+import com.djacoronel.gwacalculator.model.Semester
 import com.djacoronel.gwacalculator.utility.MyUsteGradesFetcherTask
 import com.google.android.gms.ads.AdRequest
 import dagger.android.AndroidInjection
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
             message.visibility = View.INVISIBLE
             tiger_no_sems.visibility = View.INVISIBLE
 
-            val sem = viewpager.adapter.getPageTitle(viewpager.currentItem) as String
+            val sem = (viewpager.adapter as ViewPagerAdapter).getPageSemester(viewpager.currentItem)
 
             if (mPresenter.getCourses(sem).isEmpty())
                 tiger_no_course.visibility = View.VISIBLE
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }
     }
 
-    override fun showGrades(grades: Map<String, List<Course>>) {
+    override fun showGrades(grades: Map<Semester, List<Course>>) {
         setupViewPager()
 
         for (semester in grades.keys) {
@@ -96,10 +97,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
     private fun onPageSelected(position: Int) {
         if (position == -1)
-            mPresenter.computeSEM("empty")
+            mPresenter.computeSEM(-1)
         else {
-            val sem = viewpager.adapter.getPageTitle(position) as String
-            mPresenter.computeSEM(sem)
+            val sem = (viewpager.adapter as ViewPagerAdapter).getPageSemester(viewpager.currentItem)
+            mPresenter.computeSEM(sem.id)
         }
         setMessageVisibility()
     }
@@ -129,7 +130,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         val tabStrip = tabs.getChildAt(0) as LinearLayout
         for (i in 0 until tabStrip.childCount) {
             tabStrip.getChildAt(i).setOnLongClickListener {
-                val semester = viewpager.adapter.getPageTitle(i) as String
+                val semester = (viewpager.adapter as ViewPagerAdapter).getPageSemester(viewpager.currentItem)
                 showDeleteSemesterPrompt(semester)
                 false
             }
@@ -186,7 +187,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
                     toast(getString(R.string.blank_sem_label_warning))
                     showAddSemester()
                 } else {
-                    mPresenter.addSemester(semester)
+                    mPresenter.addSemester(Semester(0, semester))
                 }
             }
             negativeButton(getString(R.string.cancel_button_label)) {
@@ -201,10 +202,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
                 val courseCode = data.getStringExtra("courseCodeInput")
                 val units = data.getDoubleExtra("unitsInput", 0.0)
                 val grade = data.getDoubleExtra("gradeInput", 0.0)
-                val semester = viewpager.adapter.getPageTitle(viewpager.currentItem) as String
+                val semester = (viewpager.adapter as ViewPagerAdapter).getPageSemester(viewpager.currentItem)
 
-                mPresenter.addCourse(Course(0, courseCode, units, grade, semester))
-                mPresenter.computeSEM(semester)
+                mPresenter.addCourse(Course(0, courseCode, units, grade, semester.id))
+                mPresenter.computeSEM(semester.id)
             }
         } else if (requestCode == 2) {
             if (resultCode == Activity.RESULT_OK) {
@@ -216,19 +217,19 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }
     }
 
-    override fun showOverwritePrompt(courses: List<Course>) {
+    override fun showOverwritePrompt(grades: LinkedHashMap<String, ArrayList<Course>>) {
         val storedSems = mPresenter.getSemesters()
         if (storedSems.isEmpty()) {
-            mPresenter.replaceData(courses)
+            mPresenter.replaceData(grades)
         } else {
             alert {
                 title = "Update or replace old data?"
                 positiveButton("Update") {
-                    mPresenter.updateData(courses)
+                    mPresenter.updateData(grades)
                     toast("Data updated!")
                 }
                 negativeButton("Replace") {
-                    mPresenter.replaceData(courses)
+                    mPresenter.replaceData(grades)
                     toast("Data replaced!")
                 }
             }.show()
@@ -264,14 +265,14 @@ class MainActivity : AppCompatActivity(), Contract.View {
         recyclerAdapter.removeCourse(course)
     }
 
-    override fun addSemesterRecycler(semester: String) {
+    override fun addSemesterRecycler(semester: Semester) {
         viewPagerAdapter.addRecycler(createRecycler(), semester)
         setupTabLongClicks()
 
         viewpager.setCurrentItem(viewPagerAdapter.count, true)
     }
 
-    override fun removeSemesterRecycler(semester: String) {
+    override fun removeSemesterRecycler(semester: Semester) {
         val nextPosition = viewPagerAdapter.removeRecycler(viewpager, semester)
         setupTabLongClicks()
 
@@ -288,7 +289,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }.show()
     }
 
-    override fun showDeleteSemesterPrompt(semester: String) {
+    override fun showDeleteSemesterPrompt(semester: Semester) {
         alert {
             title = getString(R.string.delete_semester_title)
             positiveButton(R.string.cancel_button_label) {}

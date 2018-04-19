@@ -2,6 +2,7 @@ package com.djacoronel.gwacalculator.presenter
 
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
+import com.djacoronel.gwacalculator.model.Semester
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,48 +11,57 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
 
     override fun loadData() {
         val semesters = repo.getSemesters()
-        val grades = linkedMapOf<String, List<Course>>()
+        val grades = linkedMapOf<Semester, List<Course>>()
 
-        semesters.forEach { grades.put(it, repo.getCourses(it)) }
+        semesters.forEach { grades[it] = repo.getCourses(it.id) }
 
         view.showGrades(grades)
 
         if (semesters.isNotEmpty()) {
             computeGWA()
-            computeSEM(semesters[0])
+            computeSEM(semesters[0].id)
         }
 
         view.setMessageVisibility()
     }
 
-    override fun updateData(courses: List<Course>) {
+    override fun updateData(grades: LinkedHashMap<String, ArrayList<Course>>) {
         val storedCourses = repo.getAllCourse()
 
-        for (course in courses) {
-            val courseToUpdate = storedCourses.find {
-                it.courseCode == course.courseCode && it.semester == course.semester
-            }
+        for (item in grades) {
+            for (course in item.value) {
+                val semester = repo.getSemester(item.key)
+                val courseToUpdate = storedCourses.find {
+                    it.courseCode == course.courseCode && it.semesterId == semester.id
+                }
 
-            if (courseToUpdate == null) {
-                addCourse(course)
-            } else {
-                courseToUpdate.grade = course.grade
-                updateCourse(courseToUpdate)
+                if (courseToUpdate == null) {
+                    addCourse(course)
+                } else {
+                    courseToUpdate.grade = course.grade
+                    updateCourse(courseToUpdate)
+                }
             }
         }
+        loadData()
     }
 
-    override fun replaceData(courses: List<Course>) {
+    override fun replaceData(grades: LinkedHashMap<String, ArrayList<Course>>) {
         val storedSems = repo.getSemesters()
 
         for (sem in storedSems)
             removeSemester(sem)
 
-        for (course in courses) {
-            if (!getSemesters().contains(course.semester))
-                addSemester(course.semester)
-            addCourse(course)
+        for (item in grades) {
+            addSemester(Semester(0, item.key))
+            val semester = repo.getSemester(item.key)
+
+            for (course in item.value) {
+                course.semesterId = semester.id
+                addCourse(course)
+            }
         }
+        loadData()
     }
 
     override fun computeGWA() {
@@ -67,8 +77,8 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         view.updateGWA(gwa)
     }
 
-    override fun computeSEM(semester: String) {
-        val courses = repo.getCourses(semester).filter { it.grade != 0.0 }
+    override fun computeSEM(semesterId: Int) {
+        val courses = repo.getCourses(semesterId).filter { it.grade != 0.0 }
         var sem = 0.0
 
         if (courses.isNotEmpty()) {
@@ -80,15 +90,15 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         view.updateSEM(sem)
     }
 
-    override fun getCourses(semester: String): List<Course> {
-        return repo.getCourses(semester)
+    override fun getCourses(semester: Semester): List<Course> {
+        return repo.getCourses(semester.id)
     }
 
     override fun addCourse(course: Course) {
         repo.addCourse(course)
         view.addCourse(course)
         computeGWA()
-        computeSEM(course.semester)
+        computeSEM(course.semesterId)
 
         view.setMessageVisibility()
 
@@ -98,7 +108,7 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         repo.removeCourse(course)
         view.removeCourse(course)
         computeGWA()
-        computeSEM(course.semester)
+        computeSEM(course.semesterId)
 
         view.setMessageVisibility()
     }
@@ -107,25 +117,21 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         repo.updateCourse(course)
         view.updateCourse(course)
         computeGWA()
-        computeSEM(course.semester)
+        computeSEM(course.semesterId)
     }
 
-    override fun getSemesters(): List<String> {
+    override fun getSemesters(): List<Semester> {
         return repo.getSemesters()
     }
 
-    override fun addSemester(semester: String) {
-        val semesters = getSemesters()
-
-        if (semester !in semesters) {
-            repo.addSemester(semester)
-            view.addSemesterRecycler(semester)
-        }
+    override fun addSemester(semester: Semester) {
+        repo.addSemester(semester)
+        view.addSemesterRecycler(semester)
 
         view.setMessageVisibility()
     }
 
-    override fun removeSemester(semester: String) {
+    override fun removeSemester(semester: Semester) {
         repo.removeSemester(semester)
         view.removeSemesterRecycler(semester)
         computeGWA()

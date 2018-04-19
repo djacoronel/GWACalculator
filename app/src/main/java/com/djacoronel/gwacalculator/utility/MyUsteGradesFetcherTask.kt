@@ -15,7 +15,7 @@ import java.util.regex.Pattern
 
 
 class MyUsteGradesFetcherTask(
-        private val mView: Contract.View, activity: Activity) : AsyncTask<String, Void, ArrayList<Course>>() {
+        private val mView: Contract.View, activity: Activity) : AsyncTask<String, Void, LinkedHashMap<String, ArrayList<Course>>>() {
 
     private var progressDialog = ProgressDialog(activity)
     private var weakActivity = WeakReference<Activity>(activity)
@@ -29,10 +29,10 @@ class MyUsteGradesFetcherTask(
         progressDialog.show()
     }
 
-    override fun doInBackground(vararg params: String): ArrayList<Course> {
+    override fun doInBackground(vararg params: String): LinkedHashMap<String, ArrayList<Course>> {
         val studNo = params[0]
         val password = params[1]
-        val courses = arrayListOf<Course>()
+        val grades = linkedMapOf<String, ArrayList<Course>>()
 
         try {
             HttpsTrustManager.allowAllSSL()
@@ -42,12 +42,15 @@ class MyUsteGradesFetcherTask(
             for (semLink in semLinks.reversed()) {
                 val rows = getRowsFromGradesTable(semLink, cookies)
                 val semName = generateSemName(semLink)
+                val courses = arrayListOf<Course>()
+
                 rows.filter { isRelevantRow(it) }.mapTo(courses) { createCourse(it, semName) }
+                grades[semName] = courses
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return courses
+        return grades
     }
 
     private fun getCookies(): MutableMap<String, String> {
@@ -134,14 +137,14 @@ class MyUsteGradesFetcherTask(
             grade = matcher.group().toDouble()
         }
 
-        return Course(0, courseCode, units, grade, semName)
+        return Course(0, courseCode, units, grade, 0)
     }
 
-    override fun onPostExecute(courses: ArrayList<Course>) {
-        if (courses.isEmpty())
+    override fun onPostExecute(grades: LinkedHashMap<String, ArrayList<Course>>) {
+        if (grades.isEmpty())
             weakActivity.get()?.toast("Failed to fetch grades. Check your internet connection.")
         else {
-            mView.showOverwritePrompt(courses)
+            mView.showOverwritePrompt(grades)
         }
 
         weakActivity.get()?.let {

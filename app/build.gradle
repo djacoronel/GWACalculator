@@ -8,13 +8,13 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.djacoronel.gwacalculator"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 16
-        versionName "1.0.16"
+        versionCode 17
+        versionName "1.0.17"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -34,12 +34,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'org.jetbrains.anko:anko-sqlite:0.10.0'
+    implementation 'org.jetbrains.anko:anko-sqlite:0.10.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.google.android.gms:play-services-ads:11.4.2'
-    testCompile 'org.mockito:mockito-core:2.11.0'
+    testImplementation 'org.mockito:mockito-core:2.11.0'
 
     def daggerVersion = '2.11'
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
