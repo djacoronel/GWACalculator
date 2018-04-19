@@ -43,7 +43,6 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
                 }
             }
         }
-        loadData()
     }
 
     override fun replaceData(grades: LinkedHashMap<String, ArrayList<Course>>) {
@@ -61,7 +60,6 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
                 addCourse(course)
             }
         }
-        loadData()
     }
 
     override fun computeGWA() {
@@ -126,7 +124,7 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
 
     override fun addSemester(semester: Semester) {
         repo.addSemester(semester)
-        view.addSemesterRecycler(semester)
+        view.addSemesterRecycler(repo.getSemester(semester.title))
 
         view.setMessageVisibility()
     }
