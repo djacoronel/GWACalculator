@@ -108,4 +108,13 @@ class CourseRepository @Inject constructor() : Contract.Repository {
         }
         return semester
     }
+
+    override fun updateSemester(semester: Semester) {
+        database.use {
+            update("Semester", "semester" to semester.title)
+                    .whereArgs("id = {id}",
+                            "id" to semester.id)
+                    .exec()
+        }
+    }
 }

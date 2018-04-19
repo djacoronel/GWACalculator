@@ -132,10 +132,52 @@ class MainActivity : AppCompatActivity(), Contract.View {
         for (i in 0 until tabStrip.childCount) {
             tabStrip.getChildAt(i).setOnLongClickListener {
                 val semester = (viewpager.adapter as ViewPagerAdapter).getPageSemester(viewpager.currentItem)
-                showDeleteSemesterPrompt(semester)
+
+                alert {
+                    title = "Rename or delete semester"
+                    positiveButton("Rename") { showRenameSemPrompt(semester) }
+                    negativeButton("Delete") { showDeleteSemesterPrompt(semester) }
+                }.show()
+
                 false
             }
         }
+    }
+
+    private fun showRenameSemPrompt(semester: Semester) {
+        val view = View.inflate(this, R.layout.input_semester_layout, null)
+
+        //forces all cap in input
+        val filters = view.semesterInput.filters.toMutableList()
+        filters.add(InputFilter.AllCaps())
+        view.semesterInput.filters = filters.toTypedArray()
+
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+        alert {
+            title = getString(R.string.add_semester_label)
+            customView = view
+            positiveButton(getString(R.string.add_button_label)) {
+                imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
+                val newSemesterLabel = view.semesterInput.text.toString()
+                if (newSemesterLabel == "") {
+                    toast(getString(R.string.blank_sem_label_warning))
+                    showAddSemester()
+                } else {
+                    if (mPresenter.getSemesters().find { it.title == newSemesterLabel } == null) {
+                        semester.title = newSemesterLabel
+                        mPresenter.updateSemester(semester)
+                        tabs.setupWithViewPager(viewpager)
+                        setupTabLongClicks()
+                    } else
+                        toast(getString(R.string.add_semester_label_warning))
+                }
+            }
+            negativeButton(getString(R.string.cancel_button_label)) {
+                imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
+            }
+        }.show()
     }
 
     override fun showAddPrompt() {

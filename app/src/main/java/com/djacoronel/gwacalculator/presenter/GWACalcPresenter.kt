@@ -129,6 +129,10 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         view.setMessageVisibility()
     }
 
+    override fun updateSemester(semester: Semester) {
+        repo.updateSemester(semester)
+    }
+
     override fun removeSemester(semester: Semester) {
         repo.removeSemester(semester)
         view.removeSemesterRecycler(semester)

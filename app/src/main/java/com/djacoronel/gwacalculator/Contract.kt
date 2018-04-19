@@ -33,6 +33,7 @@ class Contract {
         fun getCourses(semester: Semester): List<Course>
         fun getSemesters(): List<Semester>
         fun addSemester(semester: Semester)
+        fun updateSemester(semester: Semester)
         fun removeSemester(semester: Semester)
     }
 
@@ -46,6 +47,7 @@ class Contract {
         fun getSemester(semTitle: String): Semester
         fun getSemesters(): List<Semester>
         fun addSemester(semester: Semester)
+        fun updateSemester(semester: Semester)
         fun removeSemester(semester: Semester)
     }
 }
