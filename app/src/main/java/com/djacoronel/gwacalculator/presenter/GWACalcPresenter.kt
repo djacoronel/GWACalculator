@@ -26,7 +26,7 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
     }
 
     override fun updateData(grades: LinkedHashMap<String, ArrayList<Course>>) {
-        val storedCourses = repo.getAllCourse()
+        val storedCourses = repo.getCourses()
 
         for (item in grades) {
             for (course in item.value) {
@@ -63,7 +63,7 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
     }
 
     override fun computeGWA() {
-        val courses = repo.getAllCourse().filter { it.grade != 0.0 }
+        val courses = repo.getCourses().filter { it.grade != 0.0 }
         var gwa = 0.0
 
         if (courses.isNotEmpty()) {
@@ -88,23 +88,10 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         view.updateSEM(sem)
     }
 
-    override fun getCourses(semester: Semester): List<Course> {
-        return repo.getCourses(semester.id)
-    }
 
     override fun addCourse(course: Course) {
         repo.addCourse(course)
         view.addCourse(course)
-        computeGWA()
-        computeSEM(course.semesterId)
-
-        view.setMessageVisibility()
-
-    }
-
-    override fun removeCourse(course: Course) {
-        repo.removeCourse(course)
-        view.removeCourse(course)
         computeGWA()
         computeSEM(course.semesterId)
 
@@ -118,9 +105,19 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         computeSEM(course.semesterId)
     }
 
-    override fun getSemesters(): List<Semester> {
-        return repo.getSemesters()
+    override fun removeCourse(course: Course) {
+        repo.removeCourse(course)
+        view.removeCourse(course)
+        computeGWA()
+        computeSEM(course.semesterId)
+
+        view.setMessageVisibility()
     }
+
+    override fun getCourses(semester: Semester): List<Course> {
+        return repo.getCourses(semester.id)
+    }
+
 
     override fun addSemester(semester: Semester) {
         repo.addSemester(semester)
@@ -139,5 +136,9 @@ class GWACalcPresenter @Inject constructor(val view: Contract.View, val repo: Co
         computeGWA()
 
         view.setMessageVisibility()
+    }
+
+    override fun getSemesters(): List<Semester> {
+        return repo.getSemesters()
     }
 }

@@ -23,9 +23,9 @@ class GWACalcPresenterTest {
 
     private val semesters = mutableListOf("sem1", "sem2", "sem3")
     private val courses = listOf(
-            Course(0, "course1", 1, 1.0, "sem1"),
-            Course(0, "course2", 1, 1.0, "sem2"),
-            Course(0, "course3", 1, 1.0, "sem3")
+            Course(0, "course1", 1, 1.0, 0),
+            Course(0, "course2", 1, 1.0, 1),
+            Course(0, "course3", 1, 1.0, 2)
     )
     private val data = linkedMapOf(
             Pair(semesters[0], listOf(courses[0])),
@@ -41,7 +41,7 @@ class GWACalcPresenterTest {
 
     @Test
     fun loadGradesFromRepositoryAndLoadIntoView() {
-        `when`(mockRepository.getAllCourse()).thenReturn(courses)
+        `when`(mockRepository.getCourses()).thenReturn(courses)
         `when`(mockRepository.getSemesters()).thenReturn(semesters)
         semesters.forEach { `when`(mockRepository.getCourses(it)).thenReturn(data[it]) }
 
@@ -54,10 +54,10 @@ class GWACalcPresenterTest {
 
     @Test
     fun updateGwaGradeInView() {
-        `when`(mockRepository.getAllCourse()).thenReturn(courses)
+        `when`(mockRepository.getCourses()).thenReturn(courses)
 
         presenter.computeGWA()
-        verify(mockRepository).getAllCourse()
+        verify(mockRepository).getCourses()
         verify(mockView).updateGWA(1.0)
     }
 

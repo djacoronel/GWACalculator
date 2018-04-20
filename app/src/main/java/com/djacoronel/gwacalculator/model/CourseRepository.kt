@@ -10,27 +10,6 @@ import javax.inject.Singleton
 class CourseRepository @Inject constructor() : Contract.Repository {
     @Inject lateinit var database: DbHelper
 
-    override fun getCourse(courseCode: String): Course {
-        var course = Course(0, "CC", 0.0, 0.0, 0)
-        database.use {
-            select("Course")
-                    .whereArgs("(courseCode = {courseCode})",
-                            "courseCode" to courseCode)
-                    .parseOpt(classParser<Course>())
-                    ?.let {course = it}
-        }
-        return course
-    }
-
-    override fun getAllCourse(): MutableList<Course> {
-        var courses = mutableListOf<Course>()
-        database.use {
-            courses = select("Course")
-                    .parseList(classParser<Course>()).toMutableList()
-        }
-        return courses
-    }
-
     override fun addCourse(course: Course): Boolean {
             database.use {
                 val id = insert("Course",
@@ -60,30 +39,25 @@ class CourseRepository @Inject constructor() : Contract.Repository {
         }
     }
 
-    override fun removeSemester(semester: Semester) {
+    override fun getCourse(courseCode: String): Course {
+        var course = Course(0, "CC", 0.0, 0.0, 0)
         database.use {
-            delete("Course",
-                    "(semester = {semesterId})",
-                    "semesterId" to semester.id)
-            delete("Semester",
-                    "(id = {semesterId})",
-                    "semesterId" to semester.id)
+            select("Course")
+                    .whereArgs("(courseCode = {courseCode})",
+                            "courseCode" to courseCode)
+                    .parseOpt(classParser<Course>())
+                    ?.let { course = it }
         }
+        return course
     }
 
-    override fun addSemester(semester: Semester) {
+    override fun getCourses(): MutableList<Course> {
+        var courses = mutableListOf<Course>()
         database.use {
-            insert("Semester",
-                    "semester" to semester.title)
+            courses = select("Course")
+                    .parseList(classParser<Course>()).toMutableList()
         }
-    }
-
-    override fun getSemesters(): MutableList<Semester> {
-        var semesters = mutableListOf<Semester>()
-        database.use {
-            semesters = select("Semester").parseList(classParser<Semester>()).toMutableList()
-        }
-        return semesters
+        return courses
     }
 
     override fun getCourses(semesterId: Int): MutableList<Course> {
@@ -95,6 +69,33 @@ class CourseRepository @Inject constructor() : Contract.Repository {
                     .parseList(classParser<Course>()).toMutableList()
         }
         return courses
+    }
+
+    override fun addSemester(semester: Semester) {
+        database.use {
+            insert("Semester",
+                    "semester" to semester.title)
+        }
+    }
+
+    override fun updateSemester(semester: Semester) {
+        database.use {
+            update("Semester", "semester" to semester.title)
+                    .whereArgs("id = {id}",
+                            "id" to semester.id)
+                    .exec()
+        }
+    }
+
+    override fun removeSemester(semester: Semester) {
+        database.use {
+            delete("Course",
+                    "(semester = {semesterId})",
+                    "semesterId" to semester.id)
+            delete("Semester",
+                    "(id = {semesterId})",
+                    "semesterId" to semester.id)
+        }
     }
 
     override fun getSemester(semTitle: String): Semester {
@@ -109,12 +110,11 @@ class CourseRepository @Inject constructor() : Contract.Repository {
         return semester
     }
 
-    override fun updateSemester(semester: Semester) {
+    override fun getSemesters(): MutableList<Semester> {
+        var semesters = mutableListOf<Semester>()
         database.use {
-            update("Semester", "semester" to semester.title)
-                    .whereArgs("id = {id}",
-                            "id" to semester.id)
-                    .exec()
+            semesters = select("Semester").parseList(classParser<Semester>()).toMutableList()
         }
+        return semesters
     }
 }
