@@ -146,6 +146,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
     private fun showRenameSemPrompt(semester: Semester) {
         val view = View.inflate(this, R.layout.input_semester_layout, null)
+        view.semesterInput.setText(semester.title)
 
         //forces all cap in input
         val filters = view.semesterInput.filters.toMutableList()
