@@ -11,10 +11,7 @@ class Contract {
         fun updateSEM(sem: Double)
         fun setMessageVisibility()
 
-        fun showAddPrompt()
         fun showOverwritePrompt(grades: LinkedHashMap<String, ArrayList<Course>>)
-        fun showDeleteSemesterPrompt(semester: Semester)
-        fun showDeleteCoursePrompt(course: Course)
 
         fun addSemesterRecycler(semester: Semester)
         fun removeSemesterRecycler(semester: Semester)

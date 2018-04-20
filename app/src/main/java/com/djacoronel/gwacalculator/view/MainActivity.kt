@@ -41,13 +41,79 @@ class MainActivity : AppCompatActivity(), Contract.View {
         setContentView(R.layout.activity_main)
         AndroidInjection.inject(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        fab.setOnClickListener { showAddPrompt() }
         setupNavView()
+        setupViewPager()
+        setupAds()
 
         mPresenter.loadData()
-
-        fab.setOnClickListener { showAddPrompt() }
-        setupAds()
     }
+
+
+    private fun showAddPrompt() {
+        val fetchGradesLabel = "Fetch MyUste grades"
+        val addCourseLabel = getString(R.string.add_course_label)
+        val addSemesterLabel = getString(R.string.add_semester_label)
+        val addChoices = listOf(fetchGradesLabel, addCourseLabel, addSemesterLabel)
+
+        selector(getString(R.string.add_prompt_title), addChoices, { _, i ->
+            if (i == addChoices.indexOf(fetchGradesLabel))
+                showLogin()
+            else if (i == addChoices.indexOf(addSemesterLabel))
+                showAddSemester()
+            else if (i == addChoices.indexOf(addCourseLabel))
+                if (mPresenter.getSemesters().isNotEmpty())
+                    showAddCourse()
+                else
+                    toast(getString(R.string.add_semester_warning))
+        })
+    }
+
+    private fun showAddSemester() {
+        val view = View.inflate(this, R.layout.input_semester_layout, null)
+
+        //forces all cap in input
+        val filters = view.semesterInput.filters.toMutableList()
+        filters.add(InputFilter.AllCaps())
+        view.semesterInput.filters = filters.toTypedArray()
+
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+        alert {
+            title = getString(R.string.add_semester_label)
+            customView = view
+            positiveButton(getString(R.string.add_button_label)) {
+                imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
+                val semester = view.semesterInput.text.toString()
+                if (semester == "") {
+                    toast(getString(R.string.blank_sem_label_warning))
+                    showAddSemester()
+                } else {
+                    if (mPresenter.getSemesters().find { it.title == semester } == null) {
+                        mPresenter.addSemester(Semester(0, semester))
+                        setupNavView()
+                    } else
+                        toast(getString(R.string.add_semester_label_warning))
+                }
+            }
+            negativeButton(getString(R.string.cancel_button_label)) {
+                imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
+            }
+        }.show()
+    }
+
+    private fun showLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivityForResult(intent, 2)
+    }
+
+    private fun showAddCourse() {
+        val intent = Intent(this, AddCourseActivity::class.java)
+        startActivityForResult(intent, 1)
+    }
+
+
 
     private fun setupNavView() {
         val menu = nav_view.menu
@@ -64,82 +130,6 @@ class MainActivity : AppCompatActivity(), Contract.View {
             }
             item.actionView.setOnClickListener { showEditPrompt(semesters[i]) }
         }
-    }
-
-    override fun setMessageVisibility() {
-        if (mPresenter.getSemesters().isEmpty()) {
-            message.visibility = View.VISIBLE
-            tiger_no_sems.visibility = View.VISIBLE
-            tiger_no_course.visibility = View.INVISIBLE
-        } else {
-            message.visibility = View.INVISIBLE
-            tiger_no_sems.visibility = View.INVISIBLE
-
-            val sem = (viewpager.adapter as ViewPagerAdapter).getPageSemester(viewpager.currentItem)
-
-            if (mPresenter.getCourses(sem).isEmpty())
-                tiger_no_course.visibility = View.VISIBLE
-            else
-                tiger_no_course.visibility = View.INVISIBLE
-        }
-    }
-
-    override fun showGrades(grades: Map<Semester, List<Course>>) {
-        setupViewPager()
-
-        for (semester in grades.keys) {
-            val adapter = RecyclerAdapter()
-            grades[semester]?.let { adapter.addNewCourses(it) }
-
-            val recycler = createRecycler()
-            recycler.adapter = adapter
-            viewPagerAdapter.addRecycler(recycler, semester)
-        }
-    }
-
-    private fun setupViewPager() {
-        viewPagerAdapter = ViewPagerAdapter()
-        viewpager.adapter = viewPagerAdapter
-        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-            override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageSelected(position: Int) {
-                this@MainActivity.onPageSelected(position)
-            }
-        })
-
-        tabs.setupWithViewPager(viewpager)
-    }
-
-    private fun onPageSelected(position: Int) {
-        if (position == -1)
-            mPresenter.computeSEM(-1)
-        else {
-            val sem = (viewpager.adapter as ViewPagerAdapter).getPageSemester(viewpager.currentItem)
-            mPresenter.computeSEM(sem.id)
-        }
-        setMessageVisibility()
-    }
-
-    private fun createRecycler(): RecyclerView {
-        val semRecycler = RecyclerView(this)
-        semRecycler.layoutManager = LinearLayoutManager(this)
-        semRecycler.adapter = RecyclerAdapter()
-
-        val mDividerItemDecoration = DividerItemDecoration(
-                semRecycler.context,
-                (semRecycler.layoutManager as LinearLayoutManager).orientation
-        )
-        semRecycler.addItemDecoration(mDividerItemDecoration)
-
-        val bottomPadding = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                80.toFloat(),
-                resources.displayMetrics).toInt()
-        semRecycler.setPadding(0, 0, 0, bottomPadding)
-        semRecycler.clipToPadding = false
-
-        return semRecycler
     }
 
     private fun showEditPrompt(semester: Semester) {
@@ -187,68 +177,96 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }.show()
     }
 
-    override fun showAddPrompt() {
-        val fetchGradesLabel = "Fetch MyUste grades"
-        val addCourseLabel = getString(R.string.add_course_label)
-        val addSemesterLabel = getString(R.string.add_semester_label)
-        val addChoices = listOf(fetchGradesLabel, addCourseLabel, addSemesterLabel)
-
-        selector(getString(R.string.add_prompt_title), addChoices, { _, i ->
-            if (i == addChoices.indexOf(fetchGradesLabel))
-                showLogin()
-            else if (i == addChoices.indexOf(addSemesterLabel))
-                showAddSemester()
-            else if (i == addChoices.indexOf(addCourseLabel))
-                if (mPresenter.getSemesters().isNotEmpty())
-                    showAddCourse()
-                else
-                    toast(getString(R.string.add_semester_warning))
-        })
-    }
-
-    private fun showLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivityForResult(intent, 2)
-    }
-
-    private fun showAddCourse() {
-        val intent = Intent(this, AddCourseActivity::class.java)
-        startActivityForResult(intent, 1)
-    }
-
-    private fun showAddSemester() {
-        val view = View.inflate(this, R.layout.input_semester_layout, null)
-
-        //forces all cap in input
-        val filters = view.semesterInput.filters.toMutableList()
-        filters.add(InputFilter.AllCaps())
-        view.semesterInput.filters = filters.toTypedArray()
-
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-
+    private fun showDeleteSemesterPrompt(semester: Semester) {
         alert {
-            title = getString(R.string.add_semester_label)
-            customView = view
-            positiveButton(getString(R.string.add_button_label)) {
-                imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
-                val semester = view.semesterInput.text.toString()
-                if (semester == "") {
-                    toast(getString(R.string.blank_sem_label_warning))
-                    showAddSemester()
-                } else {
-                    if (mPresenter.getSemesters().find { it.title == semester } == null) {
-                        mPresenter.addSemester(Semester(0, semester))
-                        setupNavView()
-                    } else
-                        toast(getString(R.string.add_semester_label_warning))
-                }
-            }
-            negativeButton(getString(R.string.cancel_button_label)) {
-                imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
+            title = getString(R.string.delete_semester_title)
+            positiveButton(R.string.cancel_button_label) {}
+            negativeButton(R.string.delete_button_label) {
+                mPresenter.removeSemester(semester)
             }
         }.show()
     }
+
+
+    private fun setupViewPager() {
+        viewPagerAdapter = ViewPagerAdapter()
+        viewpager.adapter = viewPagerAdapter
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            override fun onPageScrollStateChanged(state: Int) {}
+            override fun onPageSelected(position: Int) {
+                this@MainActivity.onPageSelected(position)
+            }
+        })
+
+        tabs.setupWithViewPager(viewpager)
+    }
+
+    private fun onPageSelected(position: Int) {
+        if (position == -1)
+            mPresenter.computeSEM(-1)
+        else {
+            val sem = (viewpager.adapter as ViewPagerAdapter)
+                    .getPageSemester(viewpager.currentItem)
+
+            mPresenter.computeSEM(sem.id)
+        }
+        setMessageVisibility()
+    }
+
+    override fun setMessageVisibility() {
+        if (mPresenter.getSemesters().isEmpty()) {
+            message.visibility = View.VISIBLE
+            tiger_no_sems.visibility = View.VISIBLE
+            tiger_no_course.visibility = View.INVISIBLE
+        } else {
+            message.visibility = View.INVISIBLE
+            tiger_no_sems.visibility = View.INVISIBLE
+
+            val sem = (viewpager.adapter as ViewPagerAdapter)
+                    .getPageSemester(viewpager.currentItem)
+
+            if (mPresenter.getCourses(sem).isEmpty())
+                tiger_no_course.visibility = View.VISIBLE
+            else
+                tiger_no_course.visibility = View.INVISIBLE
+        }
+    }
+
+
+    override fun showGrades(grades: Map<Semester, List<Course>>) {
+        for (semester in grades.keys) {
+            val adapter = RecyclerAdapter()
+            grades[semester]?.let { adapter.addNewCourses(it) }
+
+            val recycler = createRecycler()
+            recycler.adapter = adapter
+            viewPagerAdapter.addRecycler(recycler, semester)
+        }
+    }
+
+    private fun createRecycler(): RecyclerView {
+        val semRecycler = RecyclerView(this)
+        semRecycler.layoutManager = LinearLayoutManager(this)
+        semRecycler.adapter = RecyclerAdapter()
+
+        val mDividerItemDecoration = DividerItemDecoration(
+                semRecycler.context,
+                (semRecycler.layoutManager as LinearLayoutManager).orientation
+        )
+        semRecycler.addItemDecoration(mDividerItemDecoration)
+
+        val bottomPadding = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                80.toFloat(),
+                resources.displayMetrics).toInt()
+        semRecycler.setPadding(0, 0, 0, bottomPadding)
+        semRecycler.clipToPadding = false
+
+        return semRecycler
+    }
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == 1) {
@@ -331,7 +349,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         setupNavView()
     }
 
-    override fun showDeleteCoursePrompt(course: Course) {
+    fun showDeleteCoursePrompt(course: Course) {
         alert {
             title = getString(R.string.delete_course_title)
             positiveButton(R.string.cancel_button_label) {}
@@ -341,15 +359,6 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }.show()
     }
 
-    override fun showDeleteSemesterPrompt(semester: Semester) {
-        alert {
-            title = getString(R.string.delete_semester_title)
-            positiveButton(R.string.cancel_button_label) {}
-            negativeButton(R.string.delete_button_label) {
-                mPresenter.removeSemester(semester)
-            }
-        }.show()
-    }
 
     fun showChangeGradePrompt(course: Course) {
         val view = View.inflate(this, R.layout.grade_selection_layout, null)
