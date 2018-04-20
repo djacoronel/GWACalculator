@@ -2,6 +2,7 @@ package com.djacoronel.gwacalculator.presenter
 
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
+import com.djacoronel.gwacalculator.model.Semester
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers
@@ -21,11 +22,14 @@ class GWACalcPresenterTest {
 
     private lateinit var presenter: GWACalcPresenter
 
-    private val semesters = mutableListOf("sem1", "sem2", "sem3")
+    private val semesters = listOf(
+            Semester(0, "sem1"),
+            Semester(1, "sem2"),
+            Semester(2, "sem3"))
     private val courses = listOf(
-            Course(0, "course1", 1, 1.0, 0),
-            Course(0, "course2", 1, 1.0, 1),
-            Course(0, "course3", 1, 1.0, 2)
+            Course(0, "course1", 1.0, 1.0, 0),
+            Course(1, "course2", 1.0, 1.0, 1),
+            Course(2, "course3", 1.0, 1.0, 2)
     )
     private val data = linkedMapOf(
             Pair(semesters[0], listOf(courses[0])),
@@ -43,7 +47,7 @@ class GWACalcPresenterTest {
     fun loadGradesFromRepositoryAndLoadIntoView() {
         `when`(mockRepository.getCourses()).thenReturn(courses)
         `when`(mockRepository.getSemesters()).thenReturn(semesters)
-        semesters.forEach { `when`(mockRepository.getCourses(it)).thenReturn(data[it]) }
+        semesters.forEach { `when`(mockRepository.getCourses(it.id)).thenReturn(data[it]) }
 
         presenter.loadData()
         verify(mockRepository).getSemesters()
@@ -65,10 +69,10 @@ class GWACalcPresenterTest {
     fun updateSemGradeInView() {
         val testSemester = semesters[0]
 
-        `when`(mockRepository.getCourses(testSemester)).thenReturn(data[testSemester])
+        `when`(mockRepository.getCourses(testSemester.id)).thenReturn(data[testSemester])
 
-        presenter.computeSEM(testSemester)
-        verify(mockRepository).getCourses(testSemester)
+        presenter.computeSEM(testSemester.id)
+        verify(mockRepository).getCourses(testSemester.id)
         verify(mockView).updateSEM(1.0)
     }
 
@@ -86,7 +90,7 @@ class GWACalcPresenterTest {
         `when`(mockRepository.getSemesters()).thenReturn(semesters)
 
         val existingSemester = semesters[0]
-        val newSemester = "sem4"
+        val newSemester = Semester(0, "sem4")
 
         presenter.addSemester(existingSemester)
         verify(mockRepository, never()).addSemester(existingSemester)
