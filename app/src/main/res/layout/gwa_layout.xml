@@ -21,22 +21,21 @@
         app:layout_constraintStart_toStartOf="@+id/gwaValue"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/gwaValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
-        android:text="@string/gwa_value"
-        android:textAlignment="center"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/semValue"
-        app:layout_constraintTop_toBottomOf="@+id/gwaText" />
+  <TextView
+    android:id="@+id/gwaValue"
+    android:textStyle="bold"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="32dp"
+    android:layout_marginEnd="70dp"
+    android:text="@string/gwa_value"
+    android:textAlignment="center"
+    android:textAppearance="@android:style/TextAppearance.Large"
+    android:textColor="@color/colorPrimaryText"
+    android:textSize="24sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/semValue"
+    app:layout_constraintTop_toBottomOf="@+id/gwaText"/>
 
     <TextView
         android:id="@+id/semText"
@@ -53,20 +52,18 @@
         app:layout_constraintStart_toStartOf="@+id/semValue"
         tools:layout_editor_absoluteY="0dp" />
 
-    <TextView
-        android:id="@+id/semValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
-        android:text="@string/sem_value"
-        android:textAlignment="center"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/gwaValue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/semText" />
+  <TextView
+    android:id="@+id/semValue"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="32dp"
+    android:text="@string/sem_value"
+    android:textAlignment="center"
+    android:textAppearance="@android:style/TextAppearance.Large"
+    android:textColor="@color/colorPrimaryText"
+    android:textSize="24sp"
+    app:layout_constraintEnd_toStartOf="@+id/gwaValue"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/semText"/>
 
 </android.support.constraint.ConstraintLayout>

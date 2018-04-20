@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -11,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.InputFilter
 import android.util.TypedValue
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.djacoronel.gwacalculator.Contract
@@ -40,7 +42,9 @@ class MainActivity : AppCompatActivity(), Contract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AndroidInjection.inject(this)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp)
         fab.setOnClickListener { showAddPrompt() }
         setupNavView()
         setupViewPager()
@@ -188,6 +192,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
 
+
     private fun setupViewPager() {
         viewPagerAdapter = ViewPagerAdapter()
         viewpager.adapter = viewPagerAdapter
@@ -308,6 +313,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }
     }
 
+
     override fun updateGWA(gwa: Double) {
         gwaValue.text = getString(R.string.gwa_format).format(gwa)
     }
@@ -349,6 +355,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         setupNavView()
     }
 
+
     fun showDeleteCoursePrompt(course: Course) {
         alert {
             title = getString(R.string.delete_course_title)
@@ -371,6 +378,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
             gradeView.setOnClickListener { alert.dismiss(); setGrade(course, gradeView.text) }
         }
     }
+
 
     private fun setGrade(course: Course, newGrade: CharSequence) {
         course.grade = newGrade.toString().toDouble()
@@ -398,5 +406,15 @@ class MainActivity : AppCompatActivity(), Contract.View {
     public override fun onDestroy() {
         super.onDestroy()
         main_adView.destroy()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                drawer_layout.openDrawer(GravityCompat.START)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
