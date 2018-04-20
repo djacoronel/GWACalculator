@@ -28,7 +28,8 @@ class ViewPagerAdapter : PagerAdapter() {
     }
 
     fun removeRecycler(pager: ViewPager, semester: Semester): Int {
-        return removeRecycler(pager, mRecyclerTitleList.indexOf(semester))
+        val sem = mRecyclerTitleList.find { it.id == semester.id }
+        return removeRecycler(pager, mRecyclerTitleList.indexOf(sem))
     }
 
     private fun removeRecycler(pager: ViewPager, position: Int): Int {

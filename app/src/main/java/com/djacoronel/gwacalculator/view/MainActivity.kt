@@ -13,7 +13,6 @@ import android.text.InputFilter
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.R
 import com.djacoronel.gwacalculator.model.Course
@@ -42,11 +41,29 @@ class MainActivity : AppCompatActivity(), Contract.View {
         setContentView(R.layout.activity_main)
         AndroidInjection.inject(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setupNavView()
 
         mPresenter.loadData()
 
         fab.setOnClickListener { showAddPrompt() }
         setupAds()
+    }
+
+    private fun setupNavView() {
+        val menu = nav_view.menu
+        val semesters = mPresenter.getSemesters()
+        menu.clear()
+
+        for (i in semesters.indices) {
+            val item = menu.add(semesters[i].title)
+            item.setActionView(R.layout.menu_image)
+            item.setOnMenuItemClickListener {
+                viewpager.setCurrentItem(i, true)
+                drawer_layout.closeDrawers()
+                false
+            }
+            item.actionView.setOnClickListener { showEditPrompt(semesters[i]) }
+        }
     }
 
     override fun setMessageVisibility() {
@@ -78,8 +95,6 @@ class MainActivity : AppCompatActivity(), Contract.View {
             recycler.adapter = adapter
             viewPagerAdapter.addRecycler(recycler, semester)
         }
-
-        setupTabLongClicks()
     }
 
     private fun setupViewPager() {
@@ -127,21 +142,12 @@ class MainActivity : AppCompatActivity(), Contract.View {
         return semRecycler
     }
 
-    private fun setupTabLongClicks() {
-        val tabStrip = tabs.getChildAt(0) as LinearLayout
-        for (i in 0 until tabStrip.childCount) {
-            tabStrip.getChildAt(i).setOnLongClickListener {
-                val semester = (viewpager.adapter as ViewPagerAdapter).getPageSemester(viewpager.currentItem)
-
-                alert {
-                    title = "Rename or delete semester"
-                    positiveButton("Rename") { showRenameSemPrompt(semester) }
-                    negativeButton("Delete") { showDeleteSemesterPrompt(semester) }
-                }.show()
-
-                false
-            }
-        }
+    private fun showEditPrompt(semester: Semester) {
+        alert {
+            title = "Rename or delete semester"
+            positiveButton("Rename") { showRenameSemPrompt(semester) }
+            negativeButton("Delete") { showDeleteSemesterPrompt(semester) }
+        }.show()
     }
 
     private fun showRenameSemPrompt(semester: Semester) {
@@ -156,9 +162,9 @@ class MainActivity : AppCompatActivity(), Contract.View {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
         alert {
-            title = getString(R.string.add_semester_label)
+            title = "Rename semester?"
             customView = view
-            positiveButton(getString(R.string.add_button_label)) {
+            positiveButton("Save") {
                 imm.hideSoftInputFromWindow(view.semesterInput.windowToken, 0)
                 val newSemesterLabel = view.semesterInput.text.toString()
                 if (newSemesterLabel == "") {
@@ -168,8 +174,9 @@ class MainActivity : AppCompatActivity(), Contract.View {
                     if (mPresenter.getSemesters().find { it.title == newSemesterLabel } == null) {
                         semester.title = newSemesterLabel
                         mPresenter.updateSemester(semester)
-                        tabs.setupWithViewPager(viewpager)
-                        setupTabLongClicks()
+
+                        tabs.getTabAt(mPresenter.getSemesters().indexOf(semester))?.text = semester.title
+                        setupNavView()
                     } else
                         toast(getString(R.string.add_semester_label_warning))
                 }
@@ -230,9 +237,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
                     toast(getString(R.string.blank_sem_label_warning))
                     showAddSemester()
                 } else {
-                    if (mPresenter.getSemesters().find { it.title == semester } == null)
+                    if (mPresenter.getSemesters().find { it.title == semester } == null) {
                         mPresenter.addSemester(Semester(0, semester))
-                    else
+                        setupNavView()
+                    } else
                         toast(getString(R.string.add_semester_label_warning))
                 }
             }
@@ -313,16 +321,14 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
     override fun addSemesterRecycler(semester: Semester) {
         viewPagerAdapter.addRecycler(createRecycler(), semester)
-        setupTabLongClicks()
-
         viewpager.setCurrentItem(viewPagerAdapter.count, true)
+        setupNavView()
     }
 
     override fun removeSemesterRecycler(semester: Semester) {
         val nextPosition = viewPagerAdapter.removeRecycler(viewpager, semester)
-        setupTabLongClicks()
-
         onPageSelected(nextPosition)
+        setupNavView()
     }
 
     override fun showDeleteCoursePrompt(course: Course) {
