@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DbHelper @Inject constructor(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "gwaDB", null, 2) {
+class DbHelper @Inject constructor(mContext: Context) : ManagedSQLiteOpenHelper(mContext, "gwaDB", null, 3) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable("Course", true,
@@ -30,8 +30,9 @@ class DbHelper @Inject constructor(mContext: Context) : ManagedSQLiteOpenHelper(
                 "courseCode" to TEXT,
                 "units" to REAL,
                 "grade" to REAL,
-                "semester" to TEXT)
+                "semester" to INTEGER)
         db.createTable("Semester", true,
-                "semester" to TEXT + PRIMARY_KEY)
+                "id" to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                "semester" to TEXT)
     }
 }

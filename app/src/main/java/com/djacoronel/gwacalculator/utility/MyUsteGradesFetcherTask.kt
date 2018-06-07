@@ -6,7 +6,6 @@ import android.os.AsyncTask
 import com.djacoronel.gwacalculator.Contract
 import com.djacoronel.gwacalculator.model.Course
 import org.jetbrains.anko.toast
-import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -30,17 +29,17 @@ class MyUsteGradesFetcherTask(
     }
 
     override fun doInBackground(vararg params: String): LinkedHashMap<String, ArrayList<Course>> {
-        val studNo = params[0]
-        val password = params[1]
+        val cookieName = params[0].split("=")[0]
+        val cookieValue = params[0].split("=")[1]
+
         val grades = linkedMapOf<String, ArrayList<Course>>()
 
         try {
             HttpsTrustManager.allowAllSSL()
-            val cookies = getCookies()
-            val semLinks = loginAndGetLinksToSemGrades(studNo, password, cookies)
+            val semLinks = getLinksToSemGrades(cookieName, cookieValue)
 
             for (semLink in semLinks.reversed()) {
-                val rows = getRowsFromGradesTable(semLink, cookies)
+                val rows = getRowsFromGradesTable(semLink, cookieName, cookieValue)
                 val semName = generateSemName(semLink)
                 val courses = arrayListOf<Course>()
 
@@ -53,38 +52,19 @@ class MyUsteGradesFetcherTask(
         return grades
     }
 
-    private fun getCookies(): MutableMap<String, String> {
-        val url = "https://myuste.ust.edu.ph/student"
-        val response = Jsoup.connect(url).userAgent(userAgent)
-                .method(Connection.Method.GET)
-                .execute()
-
-        return response.cookies()
-    }
-
-    private fun loginAndGetLinksToSemGrades(studNo: String, password: String,
-                                            cookies: MutableMap<String, String>): Elements {
-        Jsoup.connect("https://myuste.ust.edu.ph/student/loginProcess")
-                .cookies(cookies)
-                .data("txtUsername", studNo)
-                .data("txtPassword", password)
-                .userAgent(userAgent)
-                .method(Connection.Method.POST)
-                .followRedirects(true)
-                .execute()
-
+    private fun getLinksToSemGrades(cookieName: String, cookieValue: String): Elements {
         val doc = Jsoup.connect("https://myuste.ust.edu.ph/student/myGrades.jsp")
-                .cookies(cookies)
+                .cookie(cookieName, cookieValue)
                 .userAgent(userAgent)
                 .get()
         return doc.select("a#link_style1")
     }
 
-    private fun getRowsFromGradesTable(semLink: Element, cookies: MutableMap<String, String>): Elements {
+    private fun getRowsFromGradesTable(semLink: Element, cookieName: String, cookieValue: String): Elements {
         val href = semLink.attr("href")
 
         val doc = Jsoup.connect("https://myuste.ust.edu.ph/student/" + href)
-                .cookies(cookies)
+                .cookie(cookieName, cookieValue)
                 .userAgent(userAgent)
                 .get()
 
