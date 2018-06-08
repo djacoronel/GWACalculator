@@ -63,12 +63,13 @@ class MyUsteGradesFetcherTask(
     private fun getRowsFromGradesTable(semLink: Element, cookieName: String, cookieValue: String): Elements {
         val href = semLink.attr("href")
 
-        val doc = Jsoup.connect("https://myuste.ust.edu.ph/student/" + href)
+        val doc = Jsoup.connect("https://myuste.ust.edu.ph/student/$href")
                 .cookie(cookieName, cookieValue)
                 .userAgent(userAgent)
                 .get()
 
-        val table = doc.select("table#grades_table")
+        val tables = doc.select("table")
+        val table = tables.select("[style~=clear:both]")
         return table[0].select("tr")
     }
 

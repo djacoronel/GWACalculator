@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -20,7 +19,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         setupAds()
 
-
         webview.loadUrl("https://myuste.ust.edu.ph/student/")
         webview.settings.javaScriptEnabled = true
         webview.webViewClient = LoginWebViewClient()
@@ -34,6 +32,21 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    inner class LoginWebViewClient : WebViewClient() {
+        var cookie = ""
+
+        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            if (url.contains("studentcontrol")) {
+                this@LoginActivity.returnCookie(cookie)
+                return true
+            }
+            return false
+        }
+
+        override fun onPageFinished(view: WebView, url: String) {
+            cookie = CookieManager.getInstance().getCookie(url)
+        }
+    }
 
     private fun setupAds() {
         val adRequest = AdRequest.Builder()
@@ -62,24 +75,6 @@ class LoginActivity : AppCompatActivity() {
     public override fun onDestroy() {
         super.onDestroy()
         login_adView.destroy()
-    }
-
-
-    inner class LoginWebViewClient : WebViewClient() {
-        var cookie = ""
-
-        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            if (url.contains("studentcontrol")) {
-                this@LoginActivity.returnCookie(cookie)
-                return true
-            }
-            return false
-        }
-
-        override fun onPageFinished(view: WebView, url: String) {
-            cookie = CookieManager.getInstance().getCookie(url)
-            Log.d("COOKIES!!", "All the cookies in a string:$cookie")
-        }
     }
 }
 
