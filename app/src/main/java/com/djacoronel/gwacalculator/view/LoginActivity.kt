@@ -77,6 +77,3 @@ class LoginActivity : AppCompatActivity() {
         login_adView.destroy()
     }
 }
-
-
-

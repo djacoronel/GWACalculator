@@ -69,8 +69,13 @@ class MyUsteGradesFetcherTask(
                 .get()
 
         val tables = doc.select("table")
-        val table = tables.select("[style~=clear:both]")
-        return table[0].select("tr")
+        for (table in tables) {
+            val attrs = table.attributes()
+
+            if (attrs["id"] != "grades_table" && attrs["id"] != "sysem_list")
+                return table.select("tr")
+        }
+        return tables[0].select("tr")
     }
 
     private fun generateSemName(semLink: Element): String {
